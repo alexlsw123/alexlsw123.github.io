@@ -6,22 +6,22 @@
 
 main:
   - title: "Publications"
-    url: /publications/
+    url: alexlsw123.github.io/publications/
 
   - title: "Talks"
-    url: /talks/    
+    url: alexlsw123.github.io/talks/    
 
   - title: "Teaching"
-    url: /teaching/    
+    url: alexlsw123.github.io/teaching/    
     
   - title: "Portfolio"
-    url: /portfolio/
+    url: alexlsw123.github.io/portfolio/
         
   - title: "Blog Posts"
-    url: /year-archive/
+    url: alexlsw123.github.io/year-archive/
     
   - title: "CV"
-    url: /cv/
+    url: alexlsw123.github.io/cv/
     
   - title: "Guide"
-    url: /markdown/
+    url: alexlsw123.github.io/markdown/
