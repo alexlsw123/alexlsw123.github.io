@@ -1,27 +1,5 @@
-# The following is the order of the links in the header of the website.
-#
-# Changing the order here will adjust the order and you can also add additional
-# links. Removing a link prevents it from showing in the header, but does not
-# prevent it from being included in the site.
-
-main:
-  - title: "Publications"
-    url: alexlsw123.github.io/publications/
-
-  - title: "Talks"
-    url: alexlsw123.github.io/talks/    
-
-  - title: "Teaching"
-    url: alexlsw123.github.io/teaching/    
-    
-  - title: "Portfolio"
-    url: alexlsw123.github.io/portfolio/
-        
-  - title: "Blog Posts"
-    url: alexlsw123.github.io/year-archive/
-    
-  - title: "CV"
-    url: alexlsw123.github.io/cv/
-    
-  - title: "Guide"
-    url: alexlsw123.github.io/markdown/
+pages:
+- name: Home
+  url: /
+- name: Publications
+  url: /publications

@@ -1,0 +1,56 @@
+primary_name: "Sungwon (Alex) Lee"
+secondary_name: ""
+navbar_name: ""
+
+positions:
+- logo: /assets/images/badges/columbia.png  # Logo is optional
+  name: Columbia University in the City of New York
+# - name: Position 2 without logo
+
+
+email: "sl5410@columbia.edu"
+cv_link: /assets/files/resume2025.pdf
+# gscholar: 
+github: alexlsw123
+# twitter: your_twitter_id
+# wechat_qrcode: /assets/images/etc/wechat.jpg
+# wechat_prompt: >-
+#   Please tell me your <strong>name</strong> and <strong>affiliation</strong> (current or past) when adding my wechat. Thanks!
+linkedin: sungwonalexlee
+# orcid: 0009-0005-5966-1019
+
+short_bio: >-
+  <p>
+    Hi all! I am a researcher in Statistics and Data Science at the
+    <a href="https://www.columbia.edu/">Columbia University</a>.
+    I received my M.S. degree in Data Analytics from <a href="https://www.cmu.edu/">Carnegie Mellon University</a> in 2024 and 
+    B.S. degree in Statistics and Data Science from <a href="https://www.ucla.edu/">University of California, Los Angeles</a> in 2023.
+  </p>
+
+portrait_url: /assets/images/photos/profile.jpg
+# portrait_caption: >-
+#   Photo by Manja Vitolic on Unsplash (this caption is optional, comment it out to disable).
+
+education:
+- name: Carnegie Mellon University
+  logo: /assets/images/badges/cmu.jpg
+  position: M.S. in Data Analytics for Science
+  date: May. 2024
+
+- name: University of California, Los Angeles
+  logo: /assets/images/badges/ucla.png
+  position: B.S. in Statistics and Data Science
+  date: Jun. 2023
+
+# experience:
+# - name: The University of Texas at Austin
+#   logo: /assets/images/badges/utaustin.png
+#   position: Visiting Research Student
+#   date: Feb. 2024 - Jul. 2024
+
+
+# awards:
+# - name: Engineering Fellowship, UT Austin
+#   date: Sep. 2024
+# - name: Golden Tiger Award, USAG Humphreys
+#   date: Dec. 2019
