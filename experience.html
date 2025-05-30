@@ -4,28 +4,28 @@ title : Experience
 navbar_title: Experience # This should match the 'name' in _data/navigation.yml
 ---
 
-<div class="container mt-4"> {# Added container for better spacing #}
+<div class="container mt-4"> 
     <div class="row">
         <div class="col-12">
 
             <h2 class="pt-2 pb-2">Work Experience</h2>
             {% for item in site.data.profile.experience %}
-            <div class="card mb-4 shadow-sm"> {# Added mb-4 for spacing and shadow-sm for subtle shadow #}
+            <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <div class="row">
                         {% if item.logo %}
-                        <div class="col-md-1 text-center text-md-left mb-2 mb-md-0"> {# Logo column #}
+                        <div class="col-md-1 text-center text-md-left mb-2 mb-md-0"> 
                             <img src="{{ item.logo | relative_url }}" alt="{{ item.name }} logo" style="width: 50px; height: 50px; object-fit: contain;">
                         </div>
-                        <div class="col-md-11"> {# Info column #}
+                        <div class="col-md-11">
                         {% else %}
-                        <div class="col-md-12"> {# Info column without logo #}
+                        <div class="col-md-12">
                         {% endif %}
                             <h5 class="card-title font-weight-bold">{{ item.name }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{ item.position }}{% if item.dept %} - {{ item.dept }}{% endif %}</h6>
                             <p class="card-text"><small class="text-muted"><em>{{ item.date }}</em></small></p>
                             {% if item.details %}
-                            <ul class="small pl-3"> {# Indented bullet points #}
+                            <ul class="small pl-3"> 
                                 {% for detail in item.details %}
                                 <li>{{ detail }}</li>
                                 {% endfor %}
@@ -38,32 +38,6 @@ navbar_title: Experience # This should match the 'name' in _data/navigation.yml
             {% else %}
             <p>No work experience listed yet.</p>
             {% endfor %}
-
-            <h2 class="pt-4 pb-2">Education</h2>
-            {% for item in site.data.profile.education %}
-            <div class="card mb-4 shadow-sm">  {# Added mb-4 for spacing and shadow-sm #}
-                <div class="card-body">
-                     <div class="row">
-                        {% if item.logo %}
-                        <div class="col-md-1 text-center text-md-left mb-2 mb-md-0">  {# Logo column #}
-                            <img src="{{ item.logo | relative_url }}" alt="{{ item.name }} logo" style="width: 50px; height: 50px; object-fit: contain;">
-                        </div>
-                        <div class="col-md-11"> {# Info column #}
-                        {% else %}
-                        <div class="col-md-12"> {# Info column without logo #}
-                        {% endif %}
-                            <h5 class="card-title font-weight-bold">{{ item.name }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ item.position }}</h6>
-                            {% if item.dept %}<p class="card-text small">{{ item.dept }}</p>{% endif %}
-                            <p class="card-text"><small class="text-muted"><em>{{ item.date }}</em></small></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <p>No education listed yet.</p>
-            {% endfor %}
-
         </div>
     </div>
 </div>
