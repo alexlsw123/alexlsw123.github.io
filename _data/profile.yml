@@ -48,7 +48,7 @@ experience:
     company_url: https://www.ferveret.com/ # <-- ADDED HYPERLINK
     position: Data Science Intern
     dept: (Remote) San Jose, CA
-    date: September 2024 - Present
+    date: Sep. 2024 - Dec. 2024 
     details:
       - Conducted energy efficiency analysis in TensorFlow Decision Forests across 50+ data centers, leading to a 10% reduction in costs and a 15% improvement in operational performance.
       - Collaborated with cross-functional teams to develop actionable insights and bespoke data-driven reports using Python (pandas, scikit-learn) and SQL, enhancing decision-making processes and providing clear recommendations to senior leadership.
@@ -58,7 +58,7 @@ experience:
     company_url: https://www.pwc.com/us/en/services/consulting/deals.html # <-- ADDED HYPERLINK
     position: Deals Consulting Intern
     dept: San Francisco, CA
-    date: June 2024 - August 2024
+    date: Jun. 2024 - Aug. 2024
     details:
       - Utilized Azure cloud services and SQL to implement machine learning solutions that reduced ETL processing time by 20%, delivering strategic BI reports and visualizations to streamline decision-making for 50+ stakeholders.
       - Contributed developing a firm-wide workforce scenario planner, Workforce Architect, using Python, enabling senior management to make data-driven decisions around workforce optimization and growth initiatives.
@@ -68,7 +68,7 @@ experience:
     company_url: https://www.ansys.com/ # <-- ADDED HYPERLINK
     position: Data Scientist, Capstone Project
     dept: Pittsburgh, PA
-    date: January 2024 - May 2024
+    date: Jan. 2024 - May. 2024
     details:
       - Designed RNN model using PyTorch to optimize cloud computing memory consumption, reducing simulation time by 30% and cutting operational costs by 20%, supporting healthcare clients in optimizing cloud resources for their AI/ML needs.
       - Analyzed and visualized computational and financial trade-offs between cost and accuracy in a data pipeline, leveraging Bridges-2's remote computing environment to optimize the use of public cloud services for high-performance computing tasks.
@@ -78,7 +78,7 @@ experience:
     # company_url: https://www.ucla.edu/ # Optional: you can add a URL for the university too
     position: Undergraduate Researcher
     dept: Los Angeles, CA
-    date: September 2022 - July 2023
+    date: Sep. 2022 - Jul. 2023
     details:
       - Implemented Time Series Analysis for stock prediction (NVDA) using LSTM model in Python under supervision of Dr. Tsiang.
       - Proposed multiple non-stationary/stationary data from "astsa" package in R using ARIMA model to measure past and future events.
