@@ -1,5 +1,7 @@
 pages:
 - name: Home
   url: /
-- name: Publications
-  url: /publications
+- name: Experience
+  url: /experience.html
+- name: Projects
+  url: /projects.html
