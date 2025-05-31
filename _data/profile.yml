@@ -46,7 +46,7 @@ experience:
   - name: Ferveret Inc.
     logo: /assets/images/badges/ferveret.png # Replace with actual path if you have a logo
     position: Data Science Intern
-    dept: (Remote) San Jose, CA
+    dept: San Jose, CA
     date: Sep. 2024 - Dec. 2024 
     details:
       - Conducted energy efficiency analysis in TensorFlow Decision Forests across 50+ data centers, leading to a 10% reduction in costs and a 15% improvement in operational performance.
