@@ -22,7 +22,7 @@ navbar_title: Experience # This should match the 'name' in _data/navigation.yml
                         <div class="col-md-12">
                         {% endif %}
                             <h5 class="card-title font-weight-bold">{{ item.name }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ item.position }}{% if item.dept %} - {{ item.dept }}{% endif %}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ item.position }}{% if item.dept %} | {{ item.dept }}{% endif %}</h6>
                             <p class="card-text"><small class="text-muted"><em>{{ item.date }}</em></small></p>
                             {% if item.details %}
                             <ul class="small pl-3"> 
