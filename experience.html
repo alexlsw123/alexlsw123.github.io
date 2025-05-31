@@ -25,7 +25,7 @@ navbar_title: Experience # This should match the 'name' in _data/navigation.yml
                             <h6 class="card-subtitle mb-2 text-muted">{{ item.position }}{% if item.dept %} | {{ item.dept }}{% endif %}</h6>
                             <p class="card-text"><small class="text-muted"><em>{{ item.date }}</em></small></p>
                             {% if item.details %}
-                            <ul class="small pl-3"> 
+                            <ul class="experience-details-list pl-3 mt-2 mb-0"> 
                                 {% for detail in item.details %}
                                 <li>{{ detail }}</li>
                                 {% endfor %}

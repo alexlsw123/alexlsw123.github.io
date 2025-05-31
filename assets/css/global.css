@@ -59,3 +59,16 @@ img.lazy {
     font-family: Courier, monospace;
 }
 
+.experience-details-list li {
+    font-size: 1rem; /* Adjust this value as needed. 1rem is typically the browser default (e.g., 16px) */
+    /* You could also use:
+       font-size: 16px;
+       font-size: 0.95rem; (if 1rem is too big)
+       font-size: 1.1em; (110% of parent)
+    */
+}
+
+.experience-details-list {
+    font-size: 1rem; /* Adjust this value */
+}
+
