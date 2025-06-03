@@ -72,3 +72,141 @@ img.lazy {
     font-size: 1rem; /* Adjust this value */
 }
 
+/* Add these styles for the projects page */
+.project-card {
+    border: 1px solid #e0e0e0; /* Lightened border */
+    border-radius: 8px;
+    background-color: #fdfdfd; /* Slightly off-white */
+    transition: box-shadow .3s ease-in-out;
+  }
+  
+  .project-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  }
+  
+  .project-title {
+    font-weight: bold;
+    font-size: 1.3rem; /* Increased font size */
+    display: flex;
+    align-items: center;
+    color: #333; /* Darker title color */
+  }
+  
+  .project-github-link {
+    margin-left: 10px; /* Increased margin */
+    display: inline-block; /* Ensures proper alignment */
+    vertical-align: middle;
+  }
+  
+  .project-github-logo {
+    width: 22px; /* Slightly larger logo */
+    height: 22px;
+  }
+  
+  .project-date {
+    font-size: 0.9rem; /* Slightly smaller date */
+    color: #666; /* Darker grey for date */
+    white-space: nowrap;
+    margin-left: 10px; /* Add some space if title wraps */
+  }
+  
+  .project-description {
+    font-size: 1rem;
+    color: #444; /* Slightly darker description text */
+    line-height: 1.6;
+  }
+  
+  .project-description p {
+      margin-bottom: 0.5rem; /* Space between paragraphs in description */
+  }
+  
+  .project-description ul, .project-description ol {
+      margin-left: 20px;
+      margin-bottom: 0.5rem;
+  }
+  
+  .project-demo-link {
+    display: inline-block; /* Changed to inline-block */
+    margin-top: 5px; /* Adjusted margin */
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 500; /* Medium font weight */
+    padding: 2px 0;
+  }
+  
+  .project-demo-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+  
+  .project-demo-image {
+    display: block;
+    margin-top: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px; /* Slightly smaller border-radius */
+    border: 1px solid #eee; /* Light border for images */
+  }
+  
+  .project-code-snippet {
+    background-color: #f8f9fa; /* Lighter background for code */
+    padding: 12px; /* Increased padding */
+    border-radius: 5px;
+    margin-top: 10px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; /* Common monospace stack */
+    overflow-x: auto; /* Allow horizontal scrolling for long code lines */
+    font-size: 0.9rem;
+    border: 1px solid #e0e0e0; /* Light border for code block */
+  }
+  
+  .project-script {
+    margin-top: 10px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .project-script code {
+      color: #c7254e; /* Bootstrap-like color for code in scripts */
+      background-color: transparent;
+      padding: 0;
+  }
+  
+  .project-skills {
+    margin-top: 12px;
+  }
+  
+  .project-skill-tag {
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 6px; /* Add margin for tags that wrap */
+    padding: 5px 10px; /* Adjusted padding */
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.8rem; /* Slightly smaller skill tags */
+  }
+  
+  /* Responsive adjustments for project dates if needed */
+  @media (max-width: 576px) {
+    .project-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .project-date {
+      margin-left: 0;
+      margin-top: 5px;
+    }
+  }
+

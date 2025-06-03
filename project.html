@@ -1,0 +1,81 @@
+---
+layout: default
+title : Projects
+navbar_title: Projects # This should match the 'name' in _data/navigation.yml
+---
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="pt-2 pb-2">Projects</h2>
+
+            {% if site.data.projects and site.data.projects.size > 0 %}
+                {% for project in site.data.projects %}
+                <div class="card project-card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <div class="project-header">
+                            <div class="project-title">
+                                {{ project.title }}
+                                {% if project.github %}
+                                <a href="{{ project.github }}" target="_blank" rel="noopener noreferrer" class="project-github-link">
+                                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" class="project-github-logo">
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="project-date">
+                                {% if project.startDate %}
+                                    {{ project.startDate | date: "%b %Y" }}
+                                {% else %}
+                                    No Start Date
+                                {% endif %}
+                                -
+                                {% if project.ongoing %}
+                                    Ongoing
+                                {% elsif project.endDate %}
+                                    {{ project.endDate | date: "%b %Y" }}
+                                {% else %}
+                                    No End Date
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% if project.description %}
+                        <div class="project-description mt-2">
+                            {{ project.description | markdownify }}
+                        </div>
+                        {% endif %}
+
+                        {% if project.demoType %}
+                        <div class="project-demo mt-3">
+                            <strong>Demo:</strong>
+                            {% if project.demoType == "link" %}
+                            <a href="{{ project.demoContent }}" target="_blank" rel="noopener noreferrer" class="project-demo-link">
+                                Link to Project
+                            </a>
+                            {% elsif project.demoType == "image" %}
+                            <img src="{{ project.demoContent | relative_url }}" alt="{{ project.title }} Demo" class="project-demo-image img-fluid mt-2">
+                            {% elsif project.demoType == "code" %}
+                            <pre class="project-code-snippet"><code>{{ project.demoContent | escape }}</code></pre>
+                            {% elsif project.demoType == "script" %}
+                            <p class="project-script">Run: <code>{{ project.demoContent | escape }}</code></p>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {% if project.skills and project.skills.size > 0 %}
+                        <div class="project-skills mt-3">
+                            <strong>Skills:</strong>
+                            {% for skill in project.skills %}
+                            <span class="project-skill-tag">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p>No projects listed yet. Please add projects to the <code>_data/projects.yml</code> file.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>

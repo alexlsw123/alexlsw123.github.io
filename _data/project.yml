@@ -1,0 +1,58 @@
+# _data/projects.yml
+- title: "Project Alpha"
+  github: "https://github.com/yourusername/project-alpha"
+  startDate: "2023-01-15" # Use YYYY-MM-DD format
+  endDate: "2023-06-30"   # Use YYYY-MM-DD format, or leave blank if ongoing
+  ongoing: false          # Set to true if the project is ongoing, otherwise false or omit
+  description: |
+    This is a *Markdown* description for Project Alpha.
+    It can span multiple lines.
+    - Feature 1
+    - Feature 2
+  demoType: "link"        # Can be "link", "image", "code", or "script"
+  demoContent: "https://link_to_project_alpha_demo.com"
+  skills:
+    - "Jekyll"
+    - "Ruby"
+    - "HTML"
+
+- title: "Project Beta (Ongoing)"
+  github: "https://github.com/yourusername/project-beta"
+  startDate: "2023-07-01"
+  ongoing: true
+  description: |
+    Project Beta focuses on innovative data visualization techniques.
+    **Key achievements:**
+    * Developed a novel charting library.
+    * Integrated real-time data streams.
+  demoType: "image"
+  demoContent: "/assets/images/projects/project_beta_demo.png" # Example path, make sure to add your image here
+  skills:
+    - "JavaScript"
+    - "D3.js"
+    - "React"
+
+- title: "Command Line Tool"
+  github: "https://github.com/yourusername/cli-tool"
+  startDate: "2024-01-10"
+  endDate: "2024-03-15"
+  description: "A useful command-line utility for automating tasks."
+  demoType: "script"
+  demoContent: "python run_tool.py --input data.csv"
+  skills:
+    - "Python"
+    - "CLI"
+
+- title: "Code Snippet Showcase"
+  startDate: "2024-04-01"
+  ongoing: true
+  description: "A project showcasing a specific algorithm or code snippet."
+  demoType: "code"
+  demoContent: |
+    function greet(name) {
+      console.log(`Hello, ${name}!`);
+    }
+    greet('World');
+  skills:
+    - "Algorithm Design"
+    - "JavaScript"
