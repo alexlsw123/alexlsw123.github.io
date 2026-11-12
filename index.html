@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ko" data-type="software">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이성원 · ML Engineer</title>
+<meta name="description" content="예측 모델을 운영 서버까지 가져가는 ML 엔지니어 이성원의 포트폴리오. LH 홈닉 77개 단지 전력 사용량 예측, NVFP4 양자화 안전성 연구.">
+<meta property="og:title" content="이성원 · ML Engineer">
+<meta property="og:description" content="LH 홈닉 77개 단지 전력 사용량 예측 모델과 NVFP4 양자화 안전성 연구.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f7f9fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121a1e" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3038'/%3E%3Cpath d='M7 21l6-7 5 4 7-9' fill='none' stroke='%235fc1cc' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap">
+<link rel="alternate" hreflang="en" href="en.html">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav" id="top">
+  <div class="wrap">
+    <a class="brand" href="#top">이성원<span>ML Engineer</span></a>
+    <nav class="links" aria-label="주요 메뉴">
+      <a class="u" href="#lh">프로젝트</a>
+      <a class="u" href="#research">연구</a>
+      <a class="u" href="#career">경력</a>
+      <a class="u lang" href="en.html" hreflang="en" lang="en">EN</a>
+      <a class="btn btn-ghost" href="sungwon-lee-portfolio.pdf" download>포트폴리오 PDF</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- hero -->
+  <section class="hero" aria-label="소개">
+    <div class="wrap">
+      <div>
+        <div class="kicker" data-enter>ML ENGINEER · 헤리트 전문연구요원</div>
+        <h1 data-enter>예측 모델을 운영 서버까지<br class="br-d"> 가져가는 ML 엔지니어, <span class="name">이성원</span>입니다</h1>
+        <p class="lede" data-enter="2">LH 홈닉 77개 아파트 단지의 다음 날 전력 사용량을 CPU 8코어 서버에서 16초 만에 예측하는 모델을 만들었습니다. 그 서버에 설치할 수 없는 시계열 파운데이션 모델 Chronos-2와 같은 수준(R² 0.879 vs 0.881)입니다.</p>
+        <div class="cta" data-enter="3">
+          <a class="btn btn-primary" href="sungwon-lee-portfolio.pdf" download>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            포트폴리오 PDF 받기
+          </a>
+          <a class="btn btn-ghost" href="#lh">프로젝트 보기</a>
+        </div>
+      </div>
+      <div class="card diagram" data-enter="2" role="img" aria-label="LH 전력 예측 모델 구조: 입력(전력 14일, 기상, 달력, 지연)이 신경망 6개와 HGB로 들어가 0.5 대 0.5로 섞인 뒤 검사를 거쳐 kW 단위 CSV로 발행됨">
+        <svg viewBox="0 0 520 380" aria-hidden="true">
+          <path id="p1" class="dg-line" d="M142 190 C 170 190, 170 92, 198 92"/>
+          <path id="p2" class="dg-line" d="M142 190 C 170 190, 170 288, 198 288"/>
+          <path id="p3" class="dg-line" d="M346 92 C 372 92, 372 190, 380 190"/>
+          <path id="p4" class="dg-line" d="M346 288 C 372 288, 372 190, 380 190"/>
+          <path id="p5" class="dg-line" d="M428 190 L 436 190"/>
+
+          <rect class="dg-node" x="8" y="118" width="134" height="144" rx="10"/>
+          <text class="dg-t" x="24" y="148">입력</text>
+          <text class="dg-s" x="24" y="176">전력 14일</text>
+          <text class="dg-s" x="24" y="198">기상 관측·예보</text>
+          <text class="dg-s" x="24" y="220">달력</text>
+          <text class="dg-s" x="24" y="242">자료 지연 시간</text>
+
+          <rect class="dg-node hl" x="198" y="40" width="148" height="104" rx="10"/>
+          <text class="dg-t" x="214" y="70">신경망 × 6</text>
+          <text class="dg-s" x="214" y="96">하루 패치 14개</text>
+          <text class="dg-s" x="214" y="118">어텐션 1층 · 50만</text>
+
+          <rect class="dg-node" x="198" y="236" width="148" height="104" rx="10"/>
+          <text class="dg-t" x="214" y="266">HGB</text>
+          <text class="dg-s" x="214" y="292">특징 54개</text>
+          <text class="dg-s" x="214" y="314">현행 방식 재학습</text>
+
+          <circle class="dg-mix" cx="404" cy="190" r="24"/>
+          <text class="dg-mixt" x="404" y="194" text-anchor="middle">섞기</text>
+
+          <rect class="dg-node dk" x="436" y="128" width="78" height="124" rx="10"/>
+          <text class="dg-t inv" x="450" y="158">발행</text>
+          <text class="dg-s inv" x="450" y="184">검사</text>
+          <text class="dg-s inv" x="450" y="206">kW</text>
+          <text class="dg-s inv" x="450" y="228">CSV</text>
+
+          <circle class="pulse" r="4"><animateMotion dur="2.8s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+          <circle class="pulse" r="4"><animateMotion dur="2.8s" begin="1.4s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+          <circle class="pulse" r="4"><animateMotion dur="2.8s" begin=".7s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+          <circle class="pulse" r="4"><animateMotion dur="2.8s" begin="2.1s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion></circle>
+        </svg>
+        <ol class="flow-m" aria-hidden="true">
+          <li><b>입력</b><span>전력 14일 · 기상 관측·예보 · 달력 · 자료 지연</span></li>
+          <li class="hl"><b>신경망 × 6</b><span>하루 패치 14개 · 어텐션 1층 · 약 50만 파라미터</span></li>
+          <li><b>HGB</b><span>특징 54개 · 현행 방식 재학습</span></li>
+          <li class="mix"><b>0.5 : 0.5 섞기</b></li>
+          <li class="dk"><b>검사 · 발행</b><span>단지 × 24시간 kW CSV</span></li>
+        </ol>
+        <div class="diagram-foot"><span>하루 예측 <b>16 s</b> · <b>1.4 GB</b></span><span>Python 3.7 · TF 2.5 · CPU 8코어</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LH overview -->
+  <section id="lh" aria-labelledby="lh-h">
+    <div class="wrap">
+      <div class="sec-head"><span class="n">01</span><h2 id="lh-h">LH 홈닉 단지 전력 사용량 예측</h2></div>
+      <div class="meta">
+        <span><b>기간</b>2026.08 – 2026.11</span>
+        <span><b>소속</b>헤리트</span>
+        <span><b>역할</b>데이터 정제 · 모델링 · 평가 · 서빙 코드 · 인계 (1인)</span>
+        <span><b>기술</b>TensorFlow 2.5 · scikit-learn HGB · pandas</span>
+      </div>
+      <div class="ov">
+        <div>
+          <h3>문제</h3>
+          <p style="margin-top:10px">LH 홈닉 서비스 대상 77개 단지의 다음 날 24시간 전력 사용량을 시간 단위로 예측합니다. 하루 전 06시에 한 번 내고, 당일 02시에 전날 밤까지의 데이터로 다시 냅니다.</p>
+          <h3 style="margin-top:30px">지켜야 했던 조건</h3>
+          <ol class="cons">
+            <li><span>학습 · 추론 · 관리가 모두 <strong>서비스 서버 안에서</strong> 끝나야 함 (Python 3.7 · TensorFlow 2.5 · CPU 8코어, GPU 없음)</span></li>
+            <li><span>계측이 자주 끊기는 <strong>부분수집 단지 47곳도 빠짐없이</strong> 예측</span></li>
+            <li><span>배포 기준: 전 단지 <strong>R² 평균 0.82 이상</strong>, 현행 모델보다 좋을 것</span></li>
+          </ol>
+          <p class="note" style="margin-top:18px">Chronos-2가 가장 정확했지만 Python 3.9 이상이 필요해 서버에 설치할 수 없었습니다. ONNX 변환은 런타임 도입 부담으로, 지식 증류는 교사 모델을 서버에서 돌릴 수 없어 접었고, Chronos-2는 남은 격차를 재는 기준으로만 썼습니다.</p>
+        </div>
+        <div>
+          <h3>결과</h3>
+          <div class="stats">
+            <div class="card stat"><div class="k">하루 전 06시 예측</div><div class="v">0.879<small>R²</small></div><div class="d">MAE 2.61 kW</div></div>
+            <div class="card stat"><div class="k">당일 02시 재예측</div><div class="v">0.898<small>R²</small></div><div class="d">MAE 2.37 kW</div></div>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>74단지 · 같은 시간 대응</th><th class="n">R² 평균</th><th class="n">0.82↑</th><th class="n">MAE</th></tr></thead>
+              <tbody>
+                <tr class="me"><td>당일 02시 재예측</td><td class="n">0.898</td><td class="n">64</td><td class="n">2.37 kW</td></tr>
+                <tr class="me"><td>하루 전 06시 예측</td><td class="n">0.879</td><td class="n">63</td><td class="n">2.61 kW</td></tr>
+                <tr><td>Chronos-2 하루 전</td><td class="n">0.881</td><td class="n">63</td><td class="n">2.67 kW</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:16px; font-size:15px">현행 원모델(HGB) 대비 R² <strong>0.842 → 0.884</strong>, MAE <strong>3.03 → 2.56 kW</strong> (68단지). 1월 · 2월 · 봄 · 8월 총 210일을 운영 스크립트 그대로 재현해 채점했습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LH data > model -->
+  <section id="lh-data" aria-labelledby="lh-data-h">
+    <div class="wrap">
+      <h2 id="lh-data-h">성능을 올린 건 모델 설정이 아니라 데이터 작업이었습니다</h2>
+      <div class="prog">
+        <div class="chart">
+          <h3>데이터 작업을 하나씩 더할 때의 R²</h3>
+          <p class="note">하루 전 예측 · 신경망과 HGB를 섞은 결과 · Chronos-2 비교군 42단지</p>
+          <div class="dp" id="dp">
+            <div class="dp-row"><div class="lab">전 기간 캐시로 학습<span>출발점</span></div><div class="dp-track"><div class="stem" style="width:25%"></div><div class="dot" style="left:25%" tabindex="0" data-tip="출발점|0.870|전 기간 캐시에서 잘라 만든 학습 데이터"></div><div class="val" style="left:25%">0.870</div></div></div>
+            <div class="dp-row"><div class="lab"><b>+ 시점 기준 학습 데이터</b></div><div class="dp-track"><div class="stem" style="width:32.5%"></div><div class="dot" style="left:32.5%" tabindex="0" data-tip="시점 기준 학습 데이터|0.873|날짜마다 그 시각까지의 원본만으로 패널 재생성"></div><div class="val" style="left:32.5%">0.873</div></div></div>
+            <div class="dp-row"><div class="lab"><b>+ 기상 관측 과거 백필</b></div><div class="dp-track"><div class="stem" style="width:37.5%"></div><div class="dot" style="left:37.5%" tabindex="0" data-tip="기상 관측 과거 백필|0.875|사내 기상 API 58개 격자"></div><div class="val" style="left:37.5%">0.875</div></div></div>
+            <div class="dp-row"><div class="lab"><b>+ 기상 예보 과거 백필</b><span>여름 기상 끄기 규칙 제거</span></div><div class="dp-track"><div class="stem" style="width:55%"></div><div class="dot" style="left:55%" tabindex="0" data-tip="기상 예보 과거 백필|0.882|2024년 9월부터의 예보, 계절 게이팅 제거"></div><div class="val" style="left:55%">0.882</div></div></div>
+            <div class="dp-row"><div class="lab"><b>+ HGB 새 기상으로 재학습</b></div><div class="dp-track"><div class="stem" style="width:85%"></div><div class="dot" style="left:85%" tabindex="0" data-tip="HGB 재학습|0.894|구조는 그대로, 기상 이력만 늘림"></div><div class="val" style="left:85%">0.894</div></div></div>
+            <div class="dp-ref" id="dpref"><span>Chronos-2 0.892</span></div>
+          </div>
+          <div class="dp-axis"><div></div><div class="ticks"><span style="left:0">0.860</span><span style="left:25%">0.870</span><span style="left:50%">0.880</span><span style="left:75%">0.890</span><span style="left:100%">0.900</span></div></div>
+          <p class="note" style="margin-top:14px">가로축은 0.860에서 시작합니다. 설계와 채점을 같은 네 기간에서 했기 때문에, 최종 보고는 부분수집 단지를 포함한 전 단지 기준(0.879 vs 0.881)으로 "대등"이라고 했습니다.</p>
+        </div>
+        <div>
+          <div class="aside">
+            <h3>효과가 없던 모델 쪽 시도</h3>
+            <ul class="dash">
+              <li>신경망 폭 32 · 48 · 96 · 128, 블록 수 변경</li>
+              <li>입력 길이 28일 · 56일 (14일이 가장 좋음)</li>
+              <li>dropout, 배치 크기, 조기 종료 기준 변경</li>
+              <li>시드 3개 → 6개 앙상블만 소폭 이득</li>
+            </ul>
+          </div>
+          <div class="aside">
+            <h3>여름에 기상을 넣으면 나빠졌던 이유</h3>
+            <p>기상 이력이 겨울 몇 달뿐이라 모델이 난방기 관계(기온 1°C당 부하 −0.4%)를 배워 냉방기(+2.8%)에 거꾸로 적용했습니다. 계절별로 기상을 끄는 규칙을 결과를 보기 전에 정해 안 본 기간으로 검증해 쓰다가, 과거 예보를 채워 넣은 뒤 규칙을 없앴습니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LH troubleshooting -->
+  <section id="lh-issues" aria-labelledby="lh-issues-h">
+    <div class="wrap">
+      <h2 id="lh-issues-h">배포 전에 잡은 문제들</h2>
+      <div class="ts">
+        <article class="card lift">
+          <span class="tag">LEAKAGE</span>
+          <h3>실험 성능이 운영 재현보다 17% 좋게 나옴</h3>
+          <dl>
+            <dt>원인</dt><dd>전 기간 캐시의 결측 채우기가 앞뒤 값을 봐서, 정보 컷 이후의 값이 학습 입력에 섞였습니다.</dd>
+            <dt>해결</dt><dd>날짜마다 그 시각까지의 원본만으로 패널을 다시 만들어 학습 표본 31,377개를 생성했습니다.</dd>
+            <dt>결과</dt><dd class="res">봄 기간에 HGB보다 뒤지던 결과가 앞서는 쪽으로 바뀌었습니다. HGB는 같은 점검에서 차이가 없어 그대로 두었습니다.</dd>
+          </dl>
+        </article>
+        <article class="card lift">
+          <span class="tag">ROBUSTNESS</span>
+          <h3>계량기 스파이크 하나로 한 단지 R²가 −881</h3>
+          <dl>
+            <dt>원인</dt><dd>평소의 약 1,290배인 값이 14일간 입력에 남아 표본 표준편차가 9에서 809로 커졌습니다.</dd>
+            <dt>해결</dt><dd>중앙값 · IQR 정규화, 윈저화, 발행 전 상한을 넣고, 평소 수준의 10배를 벗어난 단지는 발행하지 않게 했습니다.</dd>
+            <dt>결과</dt><dd class="res">1월 신경망 평균 R² −19.26 → 0.781. 배포 기준을 평균으로 둔 덕분에 배포 전에 드러났습니다.</dd>
+          </dl>
+        </article>
+        <article class="card lift">
+          <span class="tag">COVERAGE</span>
+          <h3>검침 도착 시각이 단지마다 다름</h3>
+          <dl>
+            <dt>원인</dt><dd>모든 단지에 같은 정보 컷을 적용하면 늦게 들어오는 단지가 빠져, 한 재현일에 77곳 중 29곳만 예측됐습니다.</dd>
+            <dt>해결</dt><dd>지연 시간을 모델 입력으로 넣고 학습 때 무작위로 흔들었습니다. 이력이 짧은 단지는 가진 날을 반복해 채웁니다.</dd>
+            <dt>결과</dt><dd class="res">예측 비율 74.1% → 77.4%. 남은 제외는 대부분 실측값도 없는 단지입니다.</dd>
+          </dl>
+        </article>
+        <article class="card lift">
+          <span class="tag">TRAINING</span>
+          <h3>운영 모델 6개 중 3개가 발산한 채 저장됨</h3>
+          <dl>
+            <dt>원인</dt><dd>오염 표본이 학습에 섞여 기울기가 폭발했고, 같은 시드도 스레드 순서에 따라 5번 중 3번 발산했습니다.</dd>
+            <dt>해결</dt><dd>서빙과 같은 입력 검사로 학습 표본을 거르고, 재학습 후 모델별 에폭과 검증 손실을 자동 점검합니다.</dd>
+            <dt>결과</dt><dd class="res">재학습 6개 모두 정상 수렴(42~67에폭).</dd>
+          </dl>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- research -->
+  <section id="research" aria-labelledby="research-h">
+    <div class="wrap">
+      <div class="sec-head"><span class="n">02</span><h2 id="research-h">Lost in Quantization</h2></div>
+      <p class="sub">The Refusals a 4-bit Checkpoint Flips and Its Chat Template Hides</p>
+      <div class="meta">
+        <span><b>기간</b>2026.10 – 2026.11</span>
+        <span><b>형태</b>개인 연구 · AAAI-27 Workshop on Deployable AI 제출 · 1저자</span>
+        <span><b>기술</b>vLLM · NVFP4 · ModelOpt · RTX 5060 Ti × 2</span>
+      </div>
+      <div class="paper">
+        <div>
+          <p>소비자 GPU 한 장에 8B 모델을 올리려면 보통 남이 4비트로 양자화한 체크포인트를 받아 씁니다. 받은 NVFP4 체크포인트가 원본과 같은 유해 요청을 거절하는지, 영어와 한국어에서 다른지, 그 차이를 얼마나 믿을 만하게 잴 수 있는지 물었습니다. 짝을 이룬 요청 2,014개, 8B 모델 3개, 블라인드 사람 라벨로 검증한 판정기 2개를 썼습니다.</p>
+          <ol class="find">
+            <li><span><strong>채팅 템플릿이 양자화보다 크게 움직입니다.</strong> NVIDIA의 Llama-3.1-8B NVFP4 배포본에 딸린 템플릿을 BF16 원본에 쓰기만 해도 한국어 유해 요청 거절률이 34.6%에서 62.7%로 오릅니다.</span></li>
+            <li><span><strong>순변화는 작아도 개별 응답은 뒤집힙니다.</strong> 순 거절률 변화는 5%p 미만이지만 유해 요청의 5~10%가 거절에서 응답으로 바뀝니다. BF16 재실행만으로는 0.5~2.2%입니다.</span></li>
+            <li><span><strong>한국어가 더 흔들립니다.</strong> 영어 · 한국어 격차가 가장 큰 모델에서 한국어 거절이 3~9%p 더 자주 뒤집히고, 이중언어 보정으로도 줄지 않습니다.</span></li>
+            <li><span><strong>평가 환경도 결과의 일부입니다.</strong> 같은 체크포인트를 GPU 2장에 나누기만 해도 한국어 유해 요청의 최대 9%가 뒤집힙니다.</span></li>
+          </ol>
+        </div>
+        <div>
+          <div class="card chartbox">
+            <h4>한국어 유해 요청 거절률 · Llama-3.1-8B BF16</h4>
+            <p class="note">같은 가중치, 채팅 템플릿만 다름</p>
+            <div class="vbars">
+              <div class="vb" tabindex="0" data-tip="Meta 원본 템플릿|34.6%|한국어 유해 요청 거절률"><div class="v">34.6%</div><div class="col" style="height:52.5%"></div></div>
+              <div class="vb" tabindex="0" data-tip="NVIDIA NVFP4 배포본 템플릿|62.7%|같은 BF16 가중치"><div class="v">62.7%</div><div class="col me" style="height:95%"></div></div>
+            </div>
+            <div class="vlabels"><div>Meta 원본 템플릿</div><div>NVIDIA 배포본 템플릿</div></div>
+          </div>
+          <div class="card chartbox">
+            <h4>유해 요청이 거절 → 응답으로 뒤집힌 비율</h4>
+            <p class="note">Gemma-4-31B 판정 기준</p>
+            <div style="margin-top:14px">
+              <div class="rg-row"><div class="lab">NVFP4 양자화</div><div class="rg-track" tabindex="0" data-tip="NVFP4 양자화|5–10%|거절 → 응답 뒤집힘"><div class="seg me" style="left:35.7%;width:35.7%"></div><div class="t" style="left:calc(71.4% + 8px)">5–10%</div></div></div>
+              <div class="rg-row"><div class="lab">BF16 재실행</div><div class="rg-track" tabindex="0" data-tip="BF16 재실행(잡음)|0.5–2.2%|배치 순서만 바꿔 다시 실행"><div class="seg" style="left:3.6%;width:12.1%"></div><div class="t" style="left:calc(15.7% + 8px)">0.5–2.2%</div></div></div>
+            </div>
+            <div class="rg-axis"><div></div><div class="ticks"><span style="left:0">0%</span><span style="left:28.6%">4%</span><span style="left:57.1%">8%</span><span style="left:85.7%">12%</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- more -->
+  <section id="more" aria-labelledby="more-h">
+    <div class="wrap">
+      <div class="sec-head"><span class="n">03</span><h2 id="more-h">그 밖의 프로젝트</h2></div>
+      <div class="more">
+        <article class="card lift">
+          <span class="tag">EVALUATION</span>
+          <h3>한국 주식 수익률 예측 검증</h3>
+          <div class="when">2026.06 – 2026.10 · 개인 패키지 spred</div>
+          <ul class="dash">
+            <li>모델과 신호 조합을 바꾼 여섯 번의 시도(Ridge · LightGBM, 멀티팩터, LSTM, 수급 신호, TFT 두 차례)가 모두 단순 12-1 모멘텀을 이기지 못해, 병목은 신호라고 결론 냈습니다.</li>
+            <li>견고성 점검에서 중첩 표본으로 t값이 3~4배 부푼 것과 생존편향을 걷어내자, 레짐 전환 신호의 IC가 0.049에서 0.023(Newey-West t 1.5)으로 내려갔습니다.</li>
+            <li>남은 결론은 "레짐 전환이 모멘텀보다 낫다"(세 유니버스 모두 유지)이고, 알파가 있다는 주장은 입증되지 않았습니다.</li>
+          </ul>
+          <div class="chips"><span class="chip">pandas</span><span class="chip">LightGBM</span><span class="chip">PyTorch</span><span class="chip">walk-forward</span></div>
+        </article>
+        <article class="card lift">
+          <span class="tag">TIME SERIES</span>
+          <h3>CoGenCast 재현과 디버깅</h3>
+          <div class="when">2026.06 · LLM + flow matching 시계열 모델</div>
+          <ul class="dash">
+            <li>16GB GPU에서 옵티마이저 상태만 약 14GB라 OOM이 나서, Qwen3 두 벌을 얼리고 마지막 4층만 학습해 약 7GB로 맞췄습니다.</li>
+            <li>값이 일정한 구간에서 정규화가 입력을 316배로 키워 검증 손실이 318로 고정되던 버그를 찾아, 표준편차 하한으로 ETTh1 MSE 1.17 → 0.342.</li>
+            <li>삼성전자 일간 수익률은 MSE로는 0 예측보다 나빴지만 CRPS로는 이동 변동성 기준보다 나았습니다(0.936 vs 0.955).</li>
+          </ul>
+          <div class="chips"><span class="chip">PyTorch</span><span class="chip">Transformers</span><span class="chip">CRPS</span></div>
+        </article>
+        <article class="card lift">
+          <span class="tag">LLM AGENT</span>
+          <h3>무료 로컬 음성 비서</h3>
+          <div class="when">2026.10 · Ollama qwen2.5:14b + 브라우저 음성 인식</div>
+          <ul class="dash">
+            <li>모델이 도구를 직접 호출하면 중첩 스키마를 틀리게 채우고 지명 질문에 빈 응답을 냈습니다.</li>
+            <li>모델은 JSON 스키마로 강제한 계획 폼(장소 · 주제)만 채우고, 도구 호출과 기본 답 문장은 코드가 맡도록 나눴습니다.</li>
+            <li>모델이 쓴 답에 한국어와 중국어가 섞이면 코드의 문장 틀로 되돌립니다.</li>
+          </ul>
+          <div class="chips"><span class="chip">Ollama</span><span class="chip">JSON Schema</span><span class="chip">MCP</span><span class="chip">Web Speech</span></div>
+        </article>
+        <article class="card lift">
+          <span class="tag">GPU</span>
+          <h3>GPU 커널 학습과 배포 템플릿</h3>
+          <div class="when">2026.06 – · RTX 5060 Ti</div>
+          <ul class="dash">
+            <li>CUDA · Triton으로 행렬곱 · softmax · FlashAttention을 직접 작성하며 GPU 메모리 계층과 성능 측정을 공부하고 있습니다.</li>
+            <li>동료 배포용 PyTorch 확장 템플릿을 TORCH_LIBRARY + register_autograd로 만들어 backward · torch.compile과 호환되게 했습니다.</li>
+            <li>벤치마크에서 fused bias + GELU가 torch.compile과 fp32 동률, bf16에서는 0.75~0.92배라 배포하지 않기로 했습니다.</li>
+          </ul>
+          <div class="chips"><span class="chip">CUDA</span><span class="chip">Triton</span><span class="chip">torch.compile</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- career -->
+  <section id="career" aria-labelledby="career-h">
+    <div class="wrap">
+      <div class="sec-head"><span class="n">04</span><h2 id="career-h">경력 · 학력</h2></div>
+      <div class="career">
+        <div>
+          <div class="job">
+            <div class="when">2025.07 – 현재</div>
+            <div>
+              <h3>헤리트 (Herit Corp.)<span>Data Scientist (Manager) · 전문연구요원</span></h3>
+              <ul class="dash">
+                <li>LH 홈닉 77개 단지 전력 사용량 예측 모델 개발, 서비스 담당자에게 운영 이관</li>
+                <li>래미안 원펄라 1,000세대 이상 에너지 사용량 예측 모델 배포, 누진 구간 사전 알림</li>
+                <li>수요반응(DR) 서비스 VoC 응답 자동화 AI 에이전트 HERIA 개발, 응답 속도 60% 개선</li>
+                <li>예측과 강화학습으로 KPX 입찰 전략을 최적화하는 전력 거래 자동화 플랫폼 구축</li>
+              </ul>
+            </div>
+          </div>
+          <div class="job">
+            <div class="when">2024.09 – 2024.12</div>
+            <div>
+              <h3>Ferveret Inc.<span>Data Science Intern · 원격(San Jose, CA)</span></h3>
+              <ul class="dash">
+                <li>데이터센터 냉각 시스템 전력 소비 예측 모델 개발, 에너지 효율 15% 개선</li>
+                <li>데이터센터 운영 데이터 분석으로 운영비 10% 절감 패턴 도출</li>
+              </ul>
+            </div>
+          </div>
+          <div class="job">
+            <div class="when">2024.06 – 2024.08</div>
+            <div>
+              <h3>PricewaterhouseCoopers<span>Deals Consulting Intern · San Francisco, CA</span></h3>
+              <ul class="dash"><li>M&amp;A 계약 분리 분석, 인력 시나리오 계획 도구 설계 지원(간접비 12% 절감)</li></ul>
+            </div>
+          </div>
+          <div class="job">
+            <div class="when">2024.01 – 2024.05</div>
+            <div>
+              <h3>Ansys × CMU 캡스톤<span>Data Scientist · Pittsburgh, PA</span></h3>
+              <ul class="dash"><li>클라우드 시뮬레이션 메모리 사용량 예측 RNN 개발, 시뮬레이션 정확도 20% 개선, 계산 시간 30% 단축</li></ul>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="side">
+            <h3>학력</h3>
+            <div class="it"><b>Carnegie Mellon University</b>MS Data Analytics for Science · GPA 4.06/4.33<br><span class="mono">2024.05</span></div>
+            <div class="it"><b>University of California, Los Angeles</b>BS Statistics and Data Science<br><span class="mono">2023.06</span></div>
+          </div>
+          <div class="side">
+            <h3>활동</h3>
+            <div class="it">CMU 컴퓨터과학대학 대학원 조교 <span class="mono">2024.01–06</span></div>
+            <div class="it">Google Developer Student Club CMU, CFO <span class="mono">2023.08–2024.06</span></div>
+            <div class="it">아이스하키 U-18 국가대표 부주장, 2018 IIHF U18 세계선수권 Div II A</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="closing" id="contact">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <h2>연락처</h2>
+        <p>프로젝트의 설계 근거와 실험 기록은 면접에서 더 자세히 설명드릴 수 있습니다.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="mailto:sungwonlee.alex@gmail.com">메일 보내기</a>
+          <a class="btn btn-ghost" href="sungwon-lee-portfolio.pdf" download>포트폴리오 PDF</a>
+        </div>
+      </div>
+      <dl>
+        <dt>이메일</dt><dd><a class="u" href="mailto:sungwonlee.alex@gmail.com">sungwonlee.alex@gmail.com</a></dd>
+        <dt>LinkedIn</dt><dd><a class="u" href="https://www.linkedin.com/in/sungwonalexlee/" rel="noopener">linkedin.com/in/sungwonalexlee</a></dd>
+      </dl>
+    </div>
+    <div class="legal"><span>© 2026 이성원</span></div>
+  </div>
+</footer>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script src="site.js"></script>
+</body>
+</html>
