@@ -85,6 +85,7 @@ main > section::before, footer.closing::before {
 .sheet-code { margin: 6px 0 0; display: grid; grid-auto-flow: column; border: 1px solid var(--dim); font: 13px/1 var(--font-mono); color: var(--p-muted); }
 .sheet-code span { padding: 9px 12px; }
 .sheet-code span:first-child { color: var(--p-ink); border-right: 1px solid var(--rule); }
+@media (min-width: 1280px) { .sheet-code { grid-template-columns: 1fr auto; min-width: 196px; } }
 
 .hero::after { content: "A B C D E F G H"; position: absolute; left: 64px; right: 64px; bottom: 18px; z-index: 0; text-align: justify; text-align-last: justify; font: 11px/1 var(--font-mono); color: var(--p-muted); pointer-events: none; }
 .hero > .wrap::before { content: "1 2 3 4"; position: absolute; left: -30px; top: 0; bottom: 0; writing-mode: vertical-lr; text-align: justify; text-align-last: justify; font: 11px/1 var(--font-mono); color: var(--p-muted); pointer-events: none; }
@@ -309,9 +310,6 @@ footer.closing > .wrap { display: flex; flex-direction: column; justify-content:
 .vpp-figs .fig figcaption, #ob .fig figcaption { font-size: 14px; line-height: 1.55; color: var(--p-muted); margin-top: 18px; max-width: 56ch; }
 .bars .row--gap { margin-top: 18px; }
 @media (min-width: 640px) { #vpp .ledger-x td { padding-top: 26px; padding-bottom: 26px; } }
-#ob > .wrap { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-content: start; }
-#ob > .wrap > .group { display: contents; }
-#ob .section-head { grid-column: 1 / -1; }
 #ob .phases { grid-column: 1 / 6; list-style: none; margin: 0; padding: 0; }
 #ob .fig { grid-column: 7 / 13; margin: 0; }
 .phases li { display: grid; gap: 4px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
@@ -335,8 +333,6 @@ footer.closing > .wrap { display: flex; flex-direction: column; justify-content:
 @media (max-width: 639px) {
   .vpp-figs > .fig:first-child, #ob .phases, #ob .fig { grid-column: 1 / 13; }
   .vpp-figs > .fig:last-child { display: none; }
-  #ob > .wrap { display: grid; grid-template-columns: minmax(0, 1fr); }
-  #ob > .wrap > .group { display: block; }
   #ob .fig { margin-top: 0; }
   #ob .bars--pairs { gap: 26px; }
   #ob .pair-row { gap: 6px; }
@@ -526,6 +522,94 @@ footer.closing > .wrap { display: flex; flex-direction: column; justify-content:
   .sheet-index a { padding: 10px 0 4px; font-size: 14px; }
   .sheet-index a small { margin-top: 4px; font-size: 12px; }
 }
+
+/* ---------- data figures (viz.js): controls in one row above the plot, labels in HTML over a stretched SVG */
+.viz { margin: var(--s-6) 0 0; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.viz-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
+.seg { display: inline-flex; flex-wrap: wrap; align-items: center; }
+.seg__k { flex: 1 0 100%; margin: 0 0 6px; font: 12px/1 var(--font-text); color: var(--p-muted); }
+.range { flex-wrap: wrap; }
+.viz-ctl { align-items: flex-end; }
+.seg button, .viz .play { font: 14px/1 var(--font-text); letter-spacing: 0; color: var(--p-muted); background: transparent; border: 1px solid var(--rule); border-radius: 0; min-height: 36px; padding: 0 12px; margin: 0; cursor: pointer; transition: color .15s, background-color .15s, box-shadow .15s; }
+.seg button + button { margin-left: -1px; }
+.seg__k + button { margin-left: 0; }
+.seg button:hover, .viz .play:hover { color: var(--p-ink); background: rgba(36, 73, 232, .12); }
+.seg button[aria-pressed="true"] { position: relative; z-index: 1; color: var(--p-ink); background: rgba(36, 73, 232, .26); box-shadow: inset 0 0 0 1px var(--dim); }
+.seg button:active, .viz .play:active { transform: translateY(1px); }
+.viz .play { display: inline-flex; align-items: center; gap: 9px; color: var(--p-ink); border-color: var(--dim); }
+.viz .play svg { width: 10px; height: 10px; fill: var(--viz); }
+.viz .play[aria-pressed="true"] { background: rgba(36, 73, 232, .26); }
+.range { display: inline-flex; align-items: center; }
+.range input { width: 200px; min-height: 36px; margin: 0; accent-color: var(--viz); cursor: pointer; }
+.viz-read { margin: 0 0 0 auto; align-self: stretch; display: flex; flex-wrap: wrap; align-items: baseline; align-content: flex-end; gap: 4px 8px; font-size: 13px; color: var(--p-muted); }
+.viz-read b { font: 500 22px/1 var(--font-mono); letter-spacing: 0; color: var(--p-ink); }
+.viz-read small { font-size: 13px; }
+@media (min-width: 1280px) { .viz-read { justify-content: flex-end; } .viz-read .viz-read__k2 { margin-left: 10px; } }
+.plot { position: relative; flex: 1 1 0; min-height: 200px; touch-action: pan-y; }
+.plot > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+.plot :is(.grid, .days) line { stroke: var(--rule); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.plot .daysep { stroke: var(--dim); stroke-width: 1; opacity: .7; vector-effect: non-scaling-stroke; }
+.plot .zero { stroke: var(--p-muted); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.plot .ln { fill: none; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.plot .ln--act { stroke: var(--p-ink); stroke-width: 1.5; }
+.plot .ln--fc { stroke: var(--viz); stroke-width: 2; }
+.plot .ln--base { stroke: var(--p-muted); stroke-width: 1.25; stroke-dasharray: 4 3; }
+.plot .ln--low { stroke: var(--p-muted); stroke-width: 1.25; }
+.plot .ar--band { fill: var(--viz); opacity: .22; }
+.plot .ar--neg { fill: var(--viz); opacity: .45; }
+.plot .ar--low { fill: var(--p-muted); opacity: .12; }
+.plot .ar--q90 { fill: var(--viz); opacity: .16; }
+.plot .ar--q50 { fill: var(--viz); opacity: .32; }
+.plot .fan--future { opacity: .5; }
+.plot .unknown { fill: var(--dim); opacity: .1; }
+.plot .cut { stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.plot .tier { stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; }
+.plot .cursor { stroke: var(--p-ink); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.plot > svg.lbl { pointer-events: none; }
+:is(.lbl, .xax) text { font: 12px var(--font-mono); letter-spacing: 0; fill: var(--p-muted); }
+.lbl .t-ink { fill: var(--p-ink); }
+.lbl .t-y { paint-order: stroke; stroke: var(--p-bg); stroke-width: 5px; stroke-linejoin: round; }
+.plot .dot { position: absolute; width: 10px; height: 10px; background: var(--viz); box-shadow: 0 0 0 2px var(--p-bg); transform: translate(-50%, -50%); pointer-events: none; }
+.xax { display: block; width: 100%; height: 16px; overflow: visible; }
+.plot .xh { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--p-ink); opacity: .45; pointer-events: none; display: none; }
+.plot .tip { position: absolute; top: 10px; z-index: 3; display: none; min-width: 150px; padding: 10px 12px; background: var(--p-surface); border: 1px solid var(--dim); pointer-events: none; }
+.tip__h { display: block; margin-bottom: 6px; font: 12px/1.3 var(--font-mono); color: var(--p-muted); }
+.tip__row { display: flex; align-items: baseline; gap: 8px; font-size: 13px; line-height: 1.6; color: var(--p-muted); }
+.tip__row b { font: 500 15px var(--font-mono); letter-spacing: 0; color: var(--p-ink); }
+.tip__row--fc::before, .tip__row--act::before, .tip__row--base::before { content: ""; align-self: center; flex: none; width: 12px; height: 2px; background: var(--viz); }
+.tip__row--act::before { background: var(--p-ink); }
+.tip__row--base::before { background: var(--p-muted); }
+.viz-key { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 2px 0 0; padding: 0; list-style: none; font-size: 13px; color: var(--p-muted); }
+.viz-key i { display: inline-block; width: 16px; height: 2px; margin-right: 8px; vertical-align: middle; background: var(--viz); }
+.viz-key .k-act { background: var(--p-ink); }
+.viz-key :is(.k-band, .k-q50, .k-q90, .k-neg, .k-cut) { height: 10px; }
+.viz-key .k-band { opacity: .4; }
+.viz-key .k-q50 { opacity: .5; }
+.viz-key .k-q90 { opacity: .25; }
+.viz-key .k-neg { opacity: .6; }
+.viz-key .k-cut { background: var(--dim); opacity: .35; }
+.viz-key .k-base { height: 0; background: none; border-top: 2px dashed var(--p-muted); }
+.viz-key .k-low { background: var(--p-muted); }
+.viz-key .k-tier { height: 0; background: none; border-top: 2px dashed var(--dim); }
+.viz-key .viz-key__note { margin-left: auto; }
+.viz-note { margin: 0; font-size: 13px; line-height: 1.55; color: var(--p-muted); max-width: 100ch; }
+#ob .ob { margin-top: var(--s-6); }
+.viz-h { font-size: 22px; font-weight: 500; letter-spacing: -0.015em; line-height: 1.35; margin: 0; }
+.group > .viz:first-child { margin-top: 0; }
+@media (max-width: 1279px) { .viz-read { margin-left: 0; flex-basis: 100%; } .viz-key .viz-key__note { margin-left: 0; } }
+@media (max-width: 639px) {
+  .viz { margin-top: var(--s-5); }
+  .viz-ctl { gap: 10px 14px; }
+  .seg button, .viz .play { min-height: 44px; min-width: 44px; padding: 0 10px; }
+  .range { flex: 1 1 100%; }
+  .range input { flex: 1 1 auto; width: auto; min-height: 44px; }
+  .plot { flex: none; height: 260px; }
+  .viz-note, #ob .fig figcaption, .phases li > span:last-child { display: none; }
+  .viz { gap: 10px; }
+  #ob .viz .seg__k { display: none; }
+  #ob .plot { height: 230px; }
+  .viz-key { gap: 4px 14px; font-size: 12px; }
+}
 /* English page: longer words */
 .hero h1 { font-size: clamp(42px, 2.6vw + 16px, 60px); }
 @media (min-width: 640px) and (max-width: 1023px) { .rev { padding: 8px 0; row-gap: 6px; } .hero-draw svg { height: min(48vw, 26vh); } .hero-sheet .readout, .hero-sheet .tb { margin-top: 16px; } .rev__how li:nth-child(n+3) { display: none; } #issues .group:first-child .rev__how { display: none; } #more .ledger-x td:nth-child(2), #more .ledger-x th:nth-child(2) { display: none; } }
@@ -650,7 +734,7 @@ footer.closing > .wrap { display: flex; flex-direction: column; justify-content:
           <h2 id="lh-h">LH complex load and peak forecasting</h2>
           <p>Two forecasts a day for 77 complexes, at 06:00 the day before and 02:00 on the day. Training and inference run on the Python 3.7, 8-core CPU service server, and every data fix was rescored through the production path.</p>
           </div>
-          <p class="sheet-code" aria-hidden="true"><span>LH-01</span><span>2 / 9</span></p>
+          <p class="sheet-code" aria-hidden="true"><span>LH-01</span><span>2 / 10</span></p>
         </div>
         <figure class="ladder fill" role="img" aria-label="R² by step, 42 complexes, day-ahead, axis from 0.860: full-history cache 0.870, point-in-time data 0.873, weather observation backfill 0.875, forecast backfill 0.882, HGB retrained 0.894, level with Chronos-2 at 0.892.">
           <div class="ladder-body">
@@ -702,6 +786,29 @@ footer.closing > .wrap { display: flex; flex-direction: column; justify-content:
     </div>
   </section>
 
+  <section class="section" id="replay" aria-labelledby="replay-h">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <div>
+        <h2 id="replay-h">6 complexes replayed: forecasts against actual load</h2>
+        <p>Forecasts from the production scripts, replayed and laid over that day's actual load. Moving the run from 06:00 the day before to 02:00 on the day moves the information cutoff 20 hours later. The complexes span the error ranking; values are a share of each complex's peak.</p>
+        </div>
+        <p class="sheet-code" aria-hidden="true"><span>LH-02</span><span>3 / 10</span></p>
+      </div>
+      <figure class="viz fill" data-viz="lh">
+        <div class="viz-ctl">
+          <div class="seg" role="group" aria-label="Date" data-seg="date"><span class="seg__k" aria-hidden="true">Date</span><button type="button" aria-pressed="false" data-v="2026-01-15">Jan 15</button><button type="button" aria-pressed="false" data-v="2026-05-10">May 10</button><button type="button" aria-pressed="true" data-v="2026-08-12">Aug 12</button></div>
+          <div class="seg" role="group" aria-label="Complex" data-seg="cx"><span class="seg__k" aria-hidden="true">Complex</span><button type="button" aria-pressed="false" data-v="A">A</button><button type="button" aria-pressed="false" data-v="B">B</button><button type="button" aria-pressed="false" data-v="C">C</button><button type="button" aria-pressed="true" data-v="D">D</button><button type="button" aria-pressed="false" data-v="E">E</button><button type="button" aria-pressed="false" data-v="F">F</button></div>
+          <div class="seg" role="group" aria-label="Run" data-seg="run"><span class="seg__k" aria-hidden="true">Run</span><button type="button" aria-pressed="true" data-v="d1">06:00 day before</button><button type="button" aria-pressed="false" data-v="d0">02:00 same day</button></div>
+          <p class="viz-read" aria-live="polite"></p>
+        </div>
+        <div class="plot" role="img" aria-label="Day-ahead and same-day forecasts against actual load, by complex"></div>
+        <svg class="xax" aria-hidden="true" focusable="false"></svg>
+        <ul class="viz-key" aria-hidden="true"><li><i class="k-act"></i>Actual</li><li><i class="k-fc"></i>Forecast</li><li><i class="k-band"></i>80% band</li><li><i class="k-cut"></i>After the cutoff: unknown at forecast time</li><li class="viz-key__note">Error = the day's MAE ÷ mean actual load</li></ul>
+      </figure>
+    </div>
+  </section>
+
   <section class="section statement" id="lesson" aria-label="What the LH project taught me">
     <div class="wrap">
       <p class="lesson">Changing the network's width, depth and input length mostly made no difference. What raised accuracy was training <strong>data</strong> rebuilt point-in-time and two years of backfilled weather.</p>
@@ -721,7 +828,7 @@ footer.closing > .wrap { display: flex; flex-direction: column; justify-content:
           <h2 id="issues-h">Four forecast problems caught before launch</h2>
           <p>All four surfaced while replaying production. Struck-through numbers are the values before the fix.</p>
           </div>
-          <p class="sheet-code" aria-hidden="true"><span>LH-02</span><span>4 / 9</span></p>
+          <p class="sheet-code" aria-hidden="true"><span>LH-03</span><span>5 / 10</span></p>
         </div>
         <div class="revs">
           <article class="rev">
@@ -760,7 +867,7 @@ warn if training stops before epoch 30
     </div>
   </section>
 
-  <section class="section g2 g2m" id="vpp" aria-labelledby="vpp-h">
+  <section class="section g2" id="vpp" aria-labelledby="vpp-h">
     <div class="wrap">
       <div class="group">
         <div class="section-head section-head--row">
@@ -768,29 +875,20 @@ warn if training stops before epoch 30
           <h2 id="vpp-h">VPP day-ahead forecasting: SMP and demand</h2>
           <p>A virtual power plant bids into the day-ahead market, so it needs tomorrow's generation, price (SMP) and demand. My SMP and demand models feed its trading platform, which optimizes KPX bids with reinforcement learning.</p>
           </div>
-          <p class="sheet-code" aria-hidden="true"><span>VPP-01</span><span>5 / 9</span></p>
+          <p class="sheet-code" aria-hidden="true"><span>VPP-01</span><span>6 / 10</span></p>
         </div>
-        <div class="vpp-figs">
-          <figure class="fig">
-            <h3>When Jeju SMP goes negative</h3>
-            <div class="bars" role="img" aria-label="1,686 of 68,212 fifteen-minute Jeju SMP values were negative. Mean wind speed 3.xx m/s normally, 4.xx m/s at negative prices. Mean demand 740 MW in the high-price regime, 599 MW in the negative one.">
-              <div class="row row--base"><span class="lab"><span>Mean wind speed, normal</span><span class="num">3.xx m/s</span></span><span class="tr"><i style="--w: 68.4%"></i></span></div>
-              <div class="row"><span class="lab"><span>Mean wind speed, negative price</span><span class="num">4.xx m/s</span></span><span class="tr"><i style="--w: 91%"></i></span></div>
-              <div class="row row--base row--gap"><span class="lab"><span>Mean demand, high-price regime</span><span class="num">740 MW</span></span><span class="tr"><i style="--w: 92.5%"></i></span></div>
-              <div class="row"><span class="lab"><span>Mean demand, negative regime</span><span class="num">599 MW</span></span><span class="tr"><i style="--w: 74.9%"></i></span></div>
-            </div>
-            <figcaption>1,686 of 68,212 fifteen-minute prices (2.xx%) were negative. They come with strong wind and low demand, so wind speed and Jeju demand went into the inputs.</figcaption>
-          </figure>
-          <figure class="fig">
-            <h3>A day ahead is easier than four hours ahead</h3>
-            <div class="bars" role="img" aria-label="RMSE of the persistence baseline: 28.xx one hour ahead, 47.xx four hours ahead, 40.xx one day ahead, in KRW/kWh.">
-              <div class="row row--base"><span class="lab"><span>1 hour ahead</span><span class="num">28.xx</span></span><span class="tr"><i style="--w: 57.7%"></i></span></div>
-              <div class="row row--base"><span class="lab"><span>4 hours ahead</span><span class="num">47.xx</span></span><span class="tr"><i style="--w: 95.5%"></i></span></div>
-              <div class="row"><span class="lab"><span>1 day ahead</span><span class="num">40.xx</span></span><span class="tr"><i style="--w: 80.8%"></i></span></div>
-            </div>
-            <figcaption>RMSE (KRW/kWh) of the baseline that repeats the last value. Prices cycle daily, so a day ahead errs less than four hours ahead; the value at the same hour yesterday became a base input.</figcaption>
-          </figure>
-        </div>
+        <figure class="viz fill" data-viz="vpp">
+          <div class="viz-ctl">
+            <div class="seg" role="group" aria-label="Week" data-seg="wk"><span class="seg__k" aria-hidden="true">Week</span><button type="button" aria-pressed="true" data-v="2024-05-13">Spring 2024</button><button type="button" aria-pressed="false" data-v="2025-03-17">Spring 2025</button><button type="button" aria-pressed="false" data-v="2024-12-16">Winter 2024</button></div>
+            <div class="seg" role="group" aria-label="Strip" data-seg="low"><span class="seg__k" aria-hidden="true">Strip</span><button type="button" aria-pressed="true" data-v="wind">Wind</button><button type="button" aria-pressed="false" data-v="dem">Demand</button></div>
+            <div class="seg" role="group" aria-label="Repeat the value from" data-seg="base"><span class="seg__k" aria-hidden="true">Repeat value from</span><button type="button" aria-pressed="true" data-v="none">None</button><button type="button" aria-pressed="false" data-v="b4">4 h ago</button><button type="button" aria-pressed="false" data-v="b24">1 day ago</button></div>
+            <p class="viz-read" aria-live="polite"></p>
+          </div>
+          <div class="plot" role="img" aria-label="One week of Jeju SMP in 15-minute steps"></div>
+          <svg class="xax" aria-hidden="true" focusable="false"></svg>
+          <ul class="viz-key" aria-hidden="true"><li><i class="k-fc"></i>Jeju SMP, 15 min</li><li><i class="k-neg"></i>Below 0 KRW</li><li><i class="k-base"></i>Repeated baseline</li><li><i class="k-low"></i>Wind or Jeju demand, hourly</li></ul>
+          <p class="viz-note">1,686 of 61,725 fifteen-minute prices (2.xx%) from April 2024 to January 2026 were negative. They come with strong wind and low demand, so both are inputs, and the price a day earlier, which misses less than the one 4 hours earlier, is a base input.</p>
+        </figure>
       </div>
       <div class="group">
         <div class="ledger-x">
@@ -829,7 +927,7 @@ warn if training stops before epoch 30
     </div>
   </section>
 
-  <section class="section g2m" id="ob" aria-labelledby="ob-h">
+  <section class="section g2" id="ob" aria-labelledby="ob-h">
     <div class="wrap">
       <div class="group">
       <div class="section-head section-head--row">
@@ -837,24 +935,39 @@ warn if training stops before epoch 30
         <h2 id="ob-h">Tariff-tier alerts: will this month pass 400 kWh?</h2>
         <p>The forecasting model I deployed for a Homeniq feature that warns Raemian Oneperla households when this month's use will reach the 400 kWh tariff tier. A new complex has no history at move-in, so the model changes in three phases as data accumulates.</p>
         </div>
-        <p class="sheet-code" aria-hidden="true"><span>HN-01</span><span>6 / 9</span></p>
+        <p class="sheet-code" aria-hidden="true"><span>HN-01</span><span>7 / 10</span></p>
       </div>
-        <ol class="phases">
-          <li><b>GBDT on a similar complex</b><span class="code">Phase I · at move-in</span><span>Unit area, floor, weekday and month cycles, last-3-day mean, solar radiation, holidays</span></li>
-          <li><b>DeepAR on a month of history</b><span class="code">Phase II · after two months</span><span>Forecasts the month by drawing on similar learned patterns</span></li>
-          <li><b>Household ID embeddings</b><span class="code">Phase III · after a year</span><span>Learns each household's own cycles from a year of records</span></li>
-        </ol>
+        <div class="ob">
+          <ol class="phases">
+            <li><b>GBDT on a similar complex</b><span class="code">Phase I · at move-in</span><span>Unit area, floor, weekday and month cycles, last-3-day mean, solar radiation, holidays</span></li>
+            <li><b>DeepAR on a month of history</b><span class="code">Phase II · after two months</span><span>Forecasts the month by drawing on similar learned patterns</span></li>
+            <li><b>Household ID embeddings</b><span class="code">Phase III · after a year</span><span>Learns each household's own cycles from a year of records</span></li>
+          </ol>
+          <figure class="fig">
+            <h3>Accuracy on reaching 400 kWh</h3>
+            <div class="bars bars--pairs" role="img" aria-label="Accuracy on reaching 400 kWh, arithmetic mean versus DeepAR: Nov 1, 74% and 79%; Nov 7, 80% and 81%; Dec 1, 64% and 75%; Dec 7, 76% and 78%.">
+              <div class="pair-row"><span class="lab"><span>Forecast on Nov 1</span><span class="num">74% → 79%</span></span><span class="tr tr--base"><i style="--w: 74%"></i></span><span class="tr"><i style="--w: 79%"></i></span></div>
+              <div class="pair-row"><span class="lab"><span>Forecast on Nov 7</span><span class="num">80% → 81%</span></span><span class="tr tr--base"><i style="--w: 80%"></i></span><span class="tr"><i style="--w: 81%"></i></span></div>
+              <div class="pair-row"><span class="lab"><span>Forecast on Dec 1</span><span class="num">64% → 75%</span></span><span class="tr tr--base"><i style="--w: 64%"></i></span><span class="tr"><i style="--w: 75%"></i></span></div>
+              <div class="pair-row"><span class="lab"><span>Forecast on Dec 7</span><span class="num">76% → 78%</span></span><span class="tr tr--base"><i style="--w: 76%"></i></span><span class="tr"><i style="--w: 78%"></i></span></div>
+            </div>
+            <figcaption>Open bars: arithmetic mean; filled bars: DeepAR. Validated on hourly use of 3,010 Raemian One Bailey households (Sep 2023 to Aug 2024). The gap is widest early in the month; a week in, the month's own use lets the mean catch up.</figcaption>
+          </figure>
+        </div>
       </div>
       <div class="group">
-        <figure class="fig">
-          <h3>Accuracy on reaching 400 kWh</h3>
-          <div class="bars bars--pairs" role="img" aria-label="Accuracy on reaching 400 kWh, arithmetic mean versus DeepAR: Nov 1, 74% and 79%; Nov 7, 80% and 81%; Dec 1, 64% and 75%; Dec 7, 76% and 78%.">
-            <div class="pair-row"><span class="lab"><span>Forecast on Nov 1</span><span class="num">74% → 79%</span></span><span class="tr tr--base"><i style="--w: 74%"></i></span><span class="tr"><i style="--w: 79%"></i></span></div>
-            <div class="pair-row"><span class="lab"><span>Forecast on Nov 7</span><span class="num">80% → 81%</span></span><span class="tr tr--base"><i style="--w: 80%"></i></span><span class="tr"><i style="--w: 81%"></i></span></div>
-            <div class="pair-row"><span class="lab"><span>Forecast on Dec 1</span><span class="num">64% → 75%</span></span><span class="tr tr--base"><i style="--w: 64%"></i></span><span class="tr"><i style="--w: 75%"></i></span></div>
-            <div class="pair-row"><span class="lab"><span>Forecast on Dec 7</span><span class="num">76% → 78%</span></span><span class="tr tr--base"><i style="--w: 76%"></i></span><span class="tr"><i style="--w: 78%"></i></span></div>
+        <figure class="viz fill" data-viz="hn">
+          <h3 class="viz-h">One Bailey households' monthly use against 400 kWh</h3>
+          <div class="viz-ctl">
+            <div class="seg" role="group" aria-label="Month" data-seg="mo"><span class="seg__k" aria-hidden="true">Month</span><button type="button" aria-pressed="true" data-v="11">Nov 2023</button><button type="button" aria-pressed="false" data-v="2">Feb 2024</button></div>
+            <label class="range"><span class="seg__k">Day</span><input type="range" min="0" max="30" step="1" value="7" aria-label="Days of use so far"></label>
+            <button type="button" class="play" data-play aria-pressed="false"><svg viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M1 0.5 L9.5 5 L1 9.5 Z"/></svg><span>Play the month</span></button>
+            <p class="viz-read" aria-live="polite"></p>
           </div>
-          <figcaption>Open bars: arithmetic mean; filled bars: DeepAR. Validated on hourly use of 3,010 Raemian One Bailey households (Sep 2023 to Aug 2024). The gap is widest early in the month; a week in, the month's own use lets the mean catch up.</figcaption>
+          <div class="plot" role="img" aria-label="Cumulative monthly use across Raemian One Bailey households"></div>
+          <svg class="xax" aria-hidden="true" focusable="false"></svg>
+          <ul class="viz-key" aria-hidden="true"><li><i class="k-fc"></i>Median household</li><li><i class="k-q50"></i>Middle half</li><li><i class="k-q90"></i>Middle 80%</li><li><i class="k-tier"></i>400 kWh tier</li></ul>
+          <p class="viz-note">Cumulative use of Raemian One Bailey households over the month (hourly meters; 2,580 households in Nov 2023, 2,959 in Feb 2024). Under 1% pass 400 kWh in the first week, yet 22–24% do by month end, so the alert has to call it early.</p>
         </figure>
       </div>
     </div>
@@ -867,7 +980,7 @@ warn if training stops before epoch 30
         <h2 id="research-h">4-bit quantization safety paper</h2>
         <p>Do NVIDIA's 4-bit NVFP4 checkpoints refuse the same harmful requests as the originals? I measured it on 2,014 paired English and Korean requests.</p>
           </div>
-          <p class="sheet-code" aria-hidden="true"><span>R-01</span><span>7 / 9</span></p>
+          <p class="sheet-code" aria-hidden="true"><span>R-01</span><span>8 / 10</span></p>
       </div>
       <div class="paper">
         <ul class="facts">
@@ -900,7 +1013,7 @@ warn if training stops before epoch 30
           <div>
         <h2 id="career-h">Experience and tools</h2>
           </div>
-          <p class="sheet-code" aria-hidden="true"><span>C-01</span><span>8 / 9</span></p>
+          <p class="sheet-code" aria-hidden="true"><span>C-01</span><span>9 / 10</span></p>
       </div>
       <div class="career">
         <ol class="jobs" reversed>
@@ -950,11 +1063,13 @@ warn if training stops before epoch 30
           <li><a href="#career"><span class="t">Experience <span class="code">C-01</span></span><small>2023 – now</small></a></li>
         </ol>
       </nav>
-      <div class="legal"><span>© 2026 Sungwon Lee · revised 2026-11-13 · 9 sheets</span><a href="index.html" lang="ko" hreflang="ko">한국어</a></div>
+      <div class="legal"><span>© 2026 Sungwon Lee · revised 2026-11-15 · 10 sheets</span><a href="index.html" lang="ko" hreflang="ko">한국어</a></div>
     </div>
   </div>
 </footer>
 
+<script id="viz-data" type="application/json">{"lh":{"dates":["2026-01-15","2026-05-10","2026-08-12"],"cx":[{"id":"A","days":{"2026-01-15":{"prev":[83.1,81.2,77.1,73.0,70.2,71.6,74.3,79.7,82.5,76.2,null,65.2,60.0,57.6,57.7,67.7,null,87.6,100.0,98.1,null,98.9,89.2,84.6],"act":[null,74.6,71.6,70.8,72.5,75.0,78.0,76.4,79.0,74.7,67.8,68.5,64.1,63.9,64.9,69.7,null,null,94.0,94.6,94.2,93.8,null,81.9],"d1":[[80.6,74.5,70.8,68.6,68.2,69.6,73.7,78.8,78.9,73.9,71.4,69.6,68.2,66.6,67.2,70.0,76.4,85.1,92.9,96.6,97.2,96.7,92.1,85.7],[76.1,70.5,67.1,64.9,64.4,66.0,69.6,74.3,74.0,68.3,65.0,62.4,61.0,59.5,60.7,63.9,70.6,78.8,87.3,91.7,92.3,92.0,87.4,80.8],[86.0,79.5,75.2,72.7,72.1,73.3,78.1,83.8,84.2,80.0,78.4,76.7,75.4,73.5,73.5,75.9,82.5,91.9,99.5,103.0,103.4,102.9,98.1,91.5]],"d0":[[81.1,75.4,71.9,69.5,68.6,70.2,74.3,79.6,79.8,75.0,71.3,69.5,68.0,67.2,67.1,69.7,77.1,85.8,93.9,97.2,97.8,96.7,92.2,85.5],[77.6,72.2,69.0,66.6,65.7,67.4,71.2,76.1,75.6,70.0,65.7,63.6,62.0,61.1,61.4,64.5,72.4,80.7,89.2,93.2,93.9,92.9,88.7,81.7],[84.9,79.1,75.3,72.4,71.5,73.2,77.7,83.7,84.3,80.3,77.6,76.3,74.9,74.0,72.9,75.2,82.6,91.5,99.1,102.1,102.7,101.4,96.9,90.0]],"e1":3,"e0":3},"2026-05-10":{"prev":[79.6,76.4,70.6,67.9,64.2,66.8,69.4,73.8,65.9,59.8,55.2,53.4,54.0,51.4,52.5,57.6,64.6,72.0,78.2,82.8,89.0,88.1,88.3,86.0],"act":[80.8,75.9,73.9,72.8,69.6,69.7,71.9,72.5,72.7,69.8,61.8,60.3,54.6,58.5,59.5,62.6,70.7,79.9,86.7,98.8,99.4,100.0,96.9,85.0],"d1":[[78.2,73.0,69.6,66.6,64.9,65.3,67.2,70.4,69.7,66.0,62.0,60.5,59.0,58.9,61.0,65.7,73.1,80.6,89.6,96.3,97.9,96.9,91.9,84.0],[73.8,69.7,66.7,63.9,62.3,62.6,64.1,66.8,65.6,61.6,57.3,55.4,53.7,53.9,56.1,60.4,68.0,74.9,84.3,91.3,92.9,91.9,87.1,79.5],[82.5,77.0,73.4,70.1,68.1,68.2,70.5,74.4,73.9,70.7,66.8,65.3,64.0,64.2,66.1,71.3,78.8,86.3,95.7,101.9,103.7,102.3,97.3,89.3]],"d0":[[77.8,72.8,69.0,66.2,64.7,65.3,67.4,70.0,68.6,64.3,59.8,58.4,57.7,57.2,59.0,64.0,71.5,79.7,87.8,95.0,96.6,96.1,91.2,83.7],[74.2,69.9,66.4,63.8,62.4,62.9,64.7,66.8,65.0,60.3,55.3,53.5,52.8,52.5,54.3,59.0,66.7,74.7,82.9,90.3,92.2,91.7,86.9,79.4],[81.4,76.5,72.3,69.2,67.5,67.7,70.1,73.4,72.5,69.0,64.5,63.6,62.9,62.6,64.6,69.6,77.1,85.2,93.4,99.9,101.5,100.7,95.6,88.1]],"e1":4,"e0":4},"2026-08-12":{"prev":[null,null,67.5,62.3,62.1,60.0,62.6,65.1,67.2,65.2,66.0,64.4,67.6,66.4,70.7,74.9,81.3,89.2,95.4,100.0,94.5,93.5,null,76.8],"act":[null,67.3,62.9,59.2,58.1,57.9,60.4,64.6,58.8,59.6,56.4,61.5,null,66.0,69.4,73.8,74.0,80.5,83.0,87.9,95.3,91.1,84.6,77.1],"d1":[[71.2,66.3,62.2,59.7,57.1,57.0,61.3,65.9,65.2,61.7,60.3,60.1,62.1,64.2,65.7,70.0,73.5,81.2,89.5,93.1,94.7,91.6,85.5,75.7],[63.9,59.8,56.5,54.3,52.0,51.7,55.2,59.2,59.0,55.1,54.2,53.4,55.3,57.2,58.7,63.3,67.0,73.3,80.9,84.4,85.3,82.4,76.5,66.9],[78.3,71.9,67.1,64.4,61.7,61.5,66.0,71.3,70.6,67.6,66.3,66.3,68.9,70.9,72.1,76.7,79.7,88.2,96.7,101.2,102.1,99.0,93.2,83.5]],"d0":[[72.3,66.0,62.2,58.5,56.2,56.1,60.3,63.4,62.0,60.5,59.3,58.4,60.9,63.3,64.7,69.1,74.5,81.6,89.2,93.5,93.0,90.2,84.1,75.0],[65.9,59.6,57.3,53.7,51.8,51.3,54.6,57.3,55.9,54.6,53.7,52.5,54.9,57.1,58.7,63.0,68.2,74.3,81.5,85.3,84.4,81.5,75.7,66.8],[78.5,71.1,66.6,62.8,60.5,60.2,65.1,68.6,67.3,66.2,65.0,63.8,66.8,69.5,70.6,75.2,80.5,88.3,96.0,100.4,100.3,97.5,90.9,82.1]],"e1":3,"e0":3}}},{"id":"B","days":{"2026-01-15":{"prev":[68.9,64.9,63.6,60.6,58.8,62.8,68.4,73.0,78.8,78.2,72.9,72.1,73.1,74.0,68.8,67.8,73.8,85.9,97.6,100.0,96.2,94.2,84.7,79.4],"act":[73.1,64.6,65.7,64.7,61.5,63.2,68.4,74.8,80.1,79.5,74.0,74.6,87.8,74.4,72.2,68.4,73.1,82.7,91.1,94.2,96.3,90.7,84.6,78.5],"d1":[[73.7,66.3,62.6,60.7,60.0,61.5,65.5,72.5,77.5,76.0,73.2,72.0,71.6,71.9,68.8,69.5,72.3,79.9,90.6,94.1,95.2,93.2,88.2,81.1],[70.5,63.4,59.7,57.8,57.2,58.9,62.4,68.7,74.1,73.1,70.2,69.1,68.3,68.5,65.8,66.2,68.8,75.6,86.3,90.1,91.3,89.8,84.8,77.9],[77.8,69.8,65.7,63.7,62.7,64.2,68.7,76.4,80.8,79.1,76.6,75.1,75.0,75.6,72.1,72.8,75.6,84.4,95.3,98.2,99.4,97.1,91.9,85.2]],"d0":[[72.9,66.4,62.6,60.6,59.8,61.5,65.4,72.4,77.9,75.8,73.3,71.8,71.9,72.5,69.2,69.1,72.4,81.3,91.0,95.7,95.4,93.9,87.9,81.2],[69.6,63.4,59.7,57.7,57.1,58.8,62.4,68.9,74.5,72.8,70.3,69.0,68.8,69.0,66.1,65.6,69.0,77.0,86.5,91.5,91.1,90.1,84.1,77.8],[76.3,69.5,65.5,63.4,62.3,64.3,68.7,76.3,81.2,78.9,76.6,75.1,75.4,76.4,72.7,72.7,76.1,86.1,95.7,100.0,99.7,97.7,91.9,85.2]],"e1":4,"e0":3},"2026-05-10":{"prev":[77.5,68.3,63.3,61.1,60.8,63.5,67.5,78.1,83.0,83.2,80.3,77.6,79.7,77.3,71.8,73.4,76.3,78.9,83.9,90.6,93.6,93.6,86.4,80.0],"act":[72.4,64.0,60.1,58.2,59.8,59.1,63.6,72.8,80.3,80.8,80.8,78.1,80.0,81.7,78.9,78.8,81.7,86.3,90.8,96.2,99.3,100.0,93.1,88.5],"d1":[[77.9,70.7,65.1,61.9,60.6,61.1,63.8,70.5,77.4,79.2,79.1,78.1,78.9,80.1,77.9,78.3,79.2,83.4,90.5,98.0,100.3,99.0,93.9,85.9],[74.5,67.7,62.1,59.0,57.7,58.4,60.9,66.7,73.9,76.1,76.0,75.1,75.7,76.6,74.7,74.7,75.4,79.1,85.6,93.1,95.6,95.0,90.5,82.5],[82.1,74.4,68.5,65.0,63.4,63.7,66.9,74.4,80.8,82.5,82.7,81.8,83.1,85.1,82.4,82.8,83.5,88.3,96.0,102.9,105.1,103.8,98.5,90.8]],"d0":[[77.0,69.6,64.3,60.9,59.7,60.7,63.5,70.7,77.0,79.0,79.3,78.5,79.4,80.5,77.5,77.9,79.4,82.6,90.7,98.1,99.7,98.7,93.7,84.5],[73.5,66.5,61.1,58.0,56.8,58.0,60.7,67.2,73.5,75.9,75.8,75.4,76.2,77.1,74.3,74.1,75.6,78.4,85.4,93.0,94.8,94.6,90.0,80.9],[81.2,73.1,67.6,64.0,62.5,63.3,66.5,74.6,80.2,82.2,82.6,82.4,83.7,85.8,82.0,82.3,84.1,87.9,96.8,103.0,104.5,103.5,98.2,89.3]],"e1":3,"e0":2},"2026-08-12":{"prev":[77.6,67.9,62.7,59.5,57.5,56.3,59.5,66.6,70.3,70.9,76.7,80.2,83.2,83.8,82.3,85.8,90.3,91.8,97.4,98.9,100.0,98.3,89.0,77.4],"act":[67.5,59.7,54.3,49.4,48.9,50.0,56.0,62.5,65.1,71.0,65.9,67.9,71.8,74.6,70.9,70.9,75.4,79.1,88.6,97.8,97.8,92.7,86.2,76.1],"d1":[[71.1,63.2,58.5,53.9,52.3,51.9,55.0,62.9,66.6,66.4,67.0,67.0,69.8,72.5,72.2,73.7,78.7,82.5,91.5,99.6,102.1,98.7,91.4,80.8],[63.3,56.1,52.3,48.0,46.4,45.9,48.3,55.1,59.0,58.9,60.3,60.1,63.0,65.5,65.2,66.6,71.8,74.0,81.6,89.5,91.2,88.4,81.5,71.3],[78.9,69.3,63.8,59.1,57.3,56.7,60.0,69.0,72.5,72.6,73.1,73.3,76.8,79.7,78.7,80.4,85.0,89.8,99.0,107.6,109.6,106.3,99.2,89.0]],"d0":[[70.4,63.5,57.9,53.6,52.3,52.1,55.0,61.2,65.3,65.7,66.7,68.2,70.7,72.8,72.4,73.1,78.4,81.7,89.2,95.9,97.2,95.3,87.4,77.0],[62.8,56.0,52.0,48.3,47.0,46.3,48.6,53.9,58.0,58.8,60.6,62.1,64.2,66.0,66.1,66.8,71.5,73.4,80.3,86.4,87.4,85.3,77.7,67.6],[77.4,69.3,63.0,58.6,57.6,56.8,60.3,67.4,71.1,71.2,72.3,73.4,76.4,78.8,77.7,79.0,84.2,88.1,95.9,102.9,105.0,103.0,94.5,84.4]],"e1":4,"e0":3}}},{"id":"C","days":{"2026-01-15":{"prev":[82.7,71.4,67.8,63.0,60.8,63.1,69.5,74.2,71.8,75.2,74.8,78.5,79.6,75.7,73.0,76.7,83.8,94.0,96.4,95.1,95.1,96.2,91.5,80.4],"act":[74.9,69.2,65.5,63.3,62.0,63.8,69.6,71.1,74.4,75.2,77.0,75.0,79.1,77.1,75.8,76.0,83.9,91.9,100.0,99.0,92.1,93.2,88.4,83.1],"d1":[[77.0,70.3,66.5,64.4,63.7,64.8,69.3,75.2,77.5,76.4,74.8,74.2,74.0,73.4,72.6,74.3,78.6,86.8,93.0,95.4,95.2,93.9,90.0,82.9],[73.4,67.2,63.4,61.3,60.7,61.9,65.9,71.1,73.6,72.7,70.6,70.1,69.6,69.0,68.3,70.0,74.5,82.2,88.5,91.2,90.9,90.0,86.1,79.1],[80.9,73.7,69.6,67.2,66.4,67.5,72.8,79.5,81.6,80.5,79.3,78.7,78.8,78.2,77.0,78.6,83.0,91.9,98.1,100.5,100.3,98.6,94.5,87.3]],"d0":[[76.2,70.1,66.4,63.9,63.1,64.5,68.5,74.2,76.5,76.0,74.6,74.8,74.9,74.6,73.1,74.8,79.2,87.6,93.5,95.4,95.1,94.0,89.5,82.1],[72.9,67.0,63.5,60.9,60.3,61.8,65.4,70.4,72.7,72.5,70.8,71.0,70.7,70.4,69.2,70.8,75.4,83.2,89.2,91.2,90.9,89.9,85.5,78.3],[79.5,73.2,69.2,66.6,65.6,67.1,71.8,78.3,80.4,80.0,78.8,78.9,79.3,79.1,77.4,79.1,83.6,92.6,98.6,100.4,100.2,98.5,93.8,86.2]],"e1":3,"e0":3},"2026-05-10":{"prev":[null,66.6,67.0,65.8,63.3,64.7,67.4,72.3,82.3,83.4,83.3,83.1,83.5,76.2,78.6,77.3,77.9,83.5,null,93.8,98.6,96.4,91.8,82.4],"act":[74.8,66.9,64.8,61.1,60.6,59.5,67.3,78.6,85.1,86.7,87.5,86.8,87.0,83.5,83.2,85.8,84.8,89.8,92.1,97.4,100.0,95.2,89.8,78.0],"d1":[[76.9,69.8,65.4,62.4,61.6,63.1,68.0,73.7,78.2,80.0,79.0,79.6,79.3,79.5,79.1,79.2,82.8,87.4,92.4,98.9,99.9,97.8,93.2,84.4],[72.2,65.6,61.1,58.3,57.5,58.9,63.4,68.4,73.4,75.1,74.0,74.7,74.2,74.2,74.3,74.1,77.5,82.1,86.3,92.6,93.9,92.4,88.3,79.5],[82.5,74.8,70.1,66.8,65.6,66.9,72.3,78.9,83.1,84.9,84.2,84.9,84.9,85.7,85.0,85.2,88.7,93.9,99.8,105.8,106.8,104.7,99.7,90.9]],"d0":[[77.0,69.5,65.9,63.3,62.0,63.1,67.8,72.7,78.7,81.4,80.3,81.1,81.2,80.4,80.2,80.1,82.8,87.6,93.9,99.5,100.9,98.8,93.0,83.2],[73.1,65.8,62.1,59.5,58.3,59.4,63.7,68.1,74.5,77.0,75.5,76.5,76.5,75.7,75.6,75.2,77.9,82.7,87.8,93.7,95.5,93.8,88.3,78.7],[81.9,73.8,70.0,67.1,65.4,66.6,71.6,77.4,82.8,85.7,84.9,86.0,86.5,86.2,85.7,85.5,88.6,93.8,100.7,105.6,107.3,105.0,98.8,88.9]],"e1":4,"e0":4},"2026-08-12":{"prev":[74.6,null,65.1,59.0,55.4,52.9,55.3,60.2,60.0,58.7,62.3,67.9,69.9,75.2,75.6,81.9,87.0,89.5,99.1,100.0,95.7,91.5,77.7,72.1],"act":[null,56.0,52.5,49.2,46.8,47.6,53.2,54.5,53.4,52.2,54.4,57.1,57.9,58.2,62.6,64.4,66.3,68.8,76.1,80.7,83.8,78.3,75.5,68.3],"d1":[[62.7,56.7,52.6,48.4,46.3,46.8,51.9,56.6,56.5,55.6,55.7,57.1,59.9,61.1,62.7,64.8,68.9,74.2,83.2,90.0,89.8,85.8,79.8,71.0],[55.2,49.8,46.6,42.6,40.6,40.9,45.4,49.1,49.4,48.4,49.1,50.0,52.9,53.8,55.5,57.6,61.9,65.9,73.8,80.3,79.5,75.9,70.4,61.8],[70.3,62.6,57.8,53.4,51.2,51.4,56.8,62.5,62.3,61.7,61.9,63.5,67.0,68.2,69.3,71.6,75.4,81.5,90.8,98.3,97.4,93.5,87.6,79.2]],"d0":[[65.8,58.9,54.3,50.2,48.4,48.2,53.2,59.2,58.1,56.6,57.6,60.4,62.6,64.9,65.6,69.3,74.1,78.1,86.2,90.0,89.6,85.9,79.3,70.7],[58.8,52.1,48.9,45.1,43.4,42.9,47.2,52.5,51.4,50.2,51.8,54.4,56.2,58.3,59.4,63.0,67.3,70.0,77.7,81.2,80.6,76.5,70.3,62.2],[72.3,64.4,59.1,54.8,53.2,52.6,58.1,64.8,63.6,62.0,63.2,65.6,68.5,70.9,71.2,75.3,79.8,84.6,93.0,97.2,97.2,93.4,86.4,78.0]],"e1":5,"e0":7}}},{"id":"D","days":{"2026-01-15":{"prev":[81.6,71.2,71.7,69.5,71.1,76.9,82.0,91.8,88.3,83.4,76.1,67.4,59.8,61.3,82.0,78.5,88.1,95.0,99.1,100.0,97.7,93.6,89.5,83.5],"act":[77.6,75.5,null,70.5,69.6,72.2,79.1,83.7,83.5,82.4,84.3,75.6,67.0,57.7,62.3,65.3,72.2,85.8,98.5,96.0,98.0,94.8,82.8,78.5],"d1":[[79.8,75.0,73.2,71.9,72.1,75.2,82.2,88.9,87.4,77.4,74.8,71.4,70.3,66.3,65.6,70.8,79.3,90.0,98.7,99.8,100.0,96.6,90.7,84.5],[75.8,71.4,69.8,68.5,68.4,71.5,77.2,84.1,82.0,70.4,67.1,63.2,62.0,58.6,58.1,64.0,72.6,83.3,93.0,95.0,95.4,92.1,86.2,80.2],[84.3,78.9,76.7,75.4,75.7,79.1,86.9,93.8,93.4,85.3,83.9,80.5,79.1,74.6,73.9,77.9,86.1,97.1,104.1,104.7,104.7,100.8,94.7,88.4]],"d0":[[80.1,75.5,72.7,71.3,71.9,75.0,82.1,90.0,88.2,77.9,74.9,71.7,70.7,67.6,68.9,72.4,80.4,90.5,98.7,100.2,98.9,96.1,91.1,84.2],[76.7,72.4,69.7,68.2,68.6,71.6,77.3,85.5,83.2,71.0,67.6,63.9,62.9,59.7,61.6,66.1,74.7,84.4,93.3,95.5,94.3,91.6,86.7,80.2],[83.6,78.7,75.9,74.2,74.7,79.0,86.4,94.8,94.0,85.0,83.5,81.3,79.8,76.4,78.2,80.1,87.4,97.9,103.9,104.8,103.4,99.8,95.1,87.9]],"e1":5,"e0":6},"2026-05-10":{"prev":[76.5,69.1,67.8,66.2,65.3,66.2,71.2,64.9,61.2,47.7,44.6,42.9,39.6,null,44.2,51.8,61.5,70.2,79.5,88.2,89.5,87.4,null,74.9],"act":[71.4,66.8,64.9,62.7,63.0,65.6,69.1,69.8,65.7,56.4,43.9,42.0,43.4,44.0,50.6,55.4,66.4,79.0,95.3,100.0,97.4,95.8,86.7,73.1],"d1":[[71.6,66.5,63.8,62.0,61.8,63.5,67.9,68.1,62.2,53.2,45.5,41.5,41.1,40.9,45.1,54.0,64.3,76.5,85.6,90.8,91.5,88.8,83.2,76.1],[68.3,63.9,61.7,59.9,59.7,61.2,64.9,64.7,57.5,47.9,40.1,35.6,35.0,35.0,39.2,47.6,58.5,70.6,81.2,86.8,87.5,85.0,79.5,72.8],[74.7,69.3,66.5,64.4,64.2,65.9,71.3,72.0,67.0,59.2,51.6,47.5,47.7,47.6,51.7,60.9,70.5,81.9,90.4,95.3,96.2,92.7,86.9,79.7]],"d0":[[72.1,67.0,64.3,62.1,62.0,63.6,68.1,67.7,61.0,52.3,45.0,41.9,40.9,41.6,45.7,53.3,65.2,76.9,85.3,91.1,91.3,88.9,83.0,75.9],[69.2,64.6,62.2,60.1,60.0,61.4,65.3,64.4,56.4,47.1,39.4,35.7,34.6,35.5,39.5,47.0,59.3,71.4,80.8,87.0,87.4,85.2,79.4,72.4],[75.0,69.8,66.9,64.6,64.3,66.0,71.2,71.5,65.9,58.7,51.5,48.7,48.1,48.9,52.9,60.6,71.6,82.1,90.1,95.6,95.8,92.8,86.4,79.2]],"e1":4,"e0":4},"2026-08-12":{"prev":[76.3,72.2,66.1,62.4,61.6,64.0,63.4,68.7,70.6,62.5,54.2,48.9,56.3,62.3,55.5,66.7,80.8,85.9,94.3,99.7,100.0,96.8,93.2,78.3],"act":[null,65.4,60.0,57.6,57.4,58.8,62.9,59.9,59.2,49.7,46.3,46.2,44.6,46.8,51.3,61.0,73.4,83.0,88.1,91.7,94.5,91.1,83.1,76.5],"d1":[[68.7,63.4,59.9,58.3,57.7,58.6,64.3,69.0,66.1,60.4,55.8,53.2,54.5,55.7,58.8,63.3,69.9,76.4,87.6,93.5,94.9,91.3,84.5,76.1],[63.0,58.2,55.4,54.0,53.5,54.1,59.0,63.3,60.6,54.4,50.1,46.7,48.0,48.9,52.1,56.9,63.8,69.3,80.1,86.4,87.1,83.7,77.0,69.1],[74.1,67.7,63.7,62.0,61.4,62.2,68.4,73.6,71.1,66.1,61.2,58.9,60.7,62.0,64.7,69.5,75.8,82.8,94.0,100.2,101.2,97.6,90.8,82.3]],"d0":[[69.6,63.5,60.2,57.4,56.8,58.1,62.8,66.3,64.0,59.3,54.1,50.7,53.4,55.1,56.0,62.5,71.1,79.0,87.8,93.6,94.0,90.8,84.1,76.0],[64.6,58.4,56.3,53.5,53.2,54.1,57.7,61.2,58.5,53.5,48.6,44.7,47.3,48.6,50.0,56.4,64.9,72.1,80.6,86.5,86.3,83.1,77.1,69.3],[74.5,67.6,63.8,60.9,60.5,61.8,67.0,70.9,69.2,65.5,60.2,56.7,59.9,61.9,62.5,69.0,77.4,85.5,93.9,99.6,100.4,97.2,89.8,81.9]],"e1":6,"e0":5}}},{"id":"E","days":{"2026-01-15":{"prev":[76.0,69.4,63.9,60.7,59.3,62.2,66.4,69.6,72.1,70.0,68.7,70.0,68.5,68.6,66.0,67.7,71.0,79.7,100.0,94.1,93.4,90.9,87.1,82.3],"act":[76.9,69.4,65.7,62.0,60.2,60.5,65.3,69.6,70.7,69.1,68.6,68.9,67.3,67.4,63.8,66.4,68.4,73.9,86.3,92.6,94.7,98.9,95.7,88.8],"d1":[[76.6,69.3,65.5,62.4,60.9,61.1,64.2,70.0,72.7,70.0,68.5,66.0,65.4,65.3,63.5,64.5,64.6,71.9,84.3,91.0,92.4,92.4,90.1,83.5],[73.4,66.4,62.8,59.7,58.4,58.8,61.7,67.0,69.6,67.3,65.6,62.9,62.1,61.8,60.4,61.3,61.5,67.8,80.1,87.1,88.5,88.7,86.5,80.0],[80.4,72.6,68.3,65.1,63.4,63.4,66.9,73.5,75.9,72.8,71.6,68.9,68.7,68.6,66.4,67.5,67.9,76.2,88.8,95.0,96.4,96.3,94.1,87.7]],"d0":[[76.8,69.6,65.6,62.6,60.9,61.5,64.7,70.3,72.8,70.6,68.7,67.0,66.3,65.8,64.8,65.5,66.0,74.5,85.7,92.1,93.3,92.7,89.8,83.5],[73.6,66.8,63.0,60.2,58.7,59.5,62.5,67.5,69.7,67.8,65.6,64.0,63.0,62.3,61.6,62.2,62.8,70.4,81.7,88.4,89.4,89.1,86.3,80.0],[80.2,72.7,68.2,65.0,63.2,63.7,67.3,73.5,76.0,73.6,71.8,70.3,69.8,69.3,67.8,68.6,69.5,78.8,90.2,96.2,97.0,96.3,93.7,87.8]],"e1":3,"e0":2},"2026-05-10":{"prev":[80.4,70.6,64.8,62.4,60.3,60.1,65.2,70.3,69.9,71.7,71.1,70.6,71.9,72.5,72.4,73.6,75.5,77.9,81.6,85.1,90.9,92.0,88.4,84.5],"act":[79.6,72.8,68.2,65.5,61.9,60.9,63.2,68.4,71.8,71.7,73.3,75.4,73.0,72.3,72.2,73.9,77.7,81.0,86.3,90.0,100.0,98.2,93.8,83.8],"d1":[[79.6,72.7,68.4,65.1,63.1,62.2,63.6,67.1,71.2,72.8,73.4,72.6,72.7,73.0,72.7,73.2,75.6,79.8,85.5,92.3,95.9,96.0,93.2,86.2],[76.1,69.8,65.7,62.5,60.8,60.0,61.1,64.0,68.0,69.8,70.1,69.2,69.2,69.3,69.3,69.5,72.1,75.5,80.9,87.7,91.3,91.7,89.5,82.3],[83.6,76.2,71.6,68.0,65.8,64.5,66.1,70.4,74.3,75.9,76.7,76.0,76.4,77.3,76.5,77.2,79.8,84.4,90.6,96.9,100.3,100.4,97.7,91.0]],"d0":[[79.7,72.6,67.8,64.7,62.2,61.6,63.2,66.6,70.5,73.4,74.0,73.6,73.4,74.1,73.8,74.1,76.6,80.9,85.9,92.0,96.5,96.7,93.1,85.8],[76.1,69.8,65.1,62.2,59.9,59.5,61.0,63.8,67.6,70.6,70.6,70.1,69.9,70.5,70.5,70.3,73.0,76.7,81.2,87.2,91.8,92.6,89.4,81.9],[83.4,76.0,70.8,67.5,64.7,63.7,65.5,69.7,73.5,76.4,77.2,77.4,77.3,78.6,78.0,78.3,81.0,85.7,91.4,96.4,100.8,101.0,97.6,90.7]],"e1":1,"e0":1},"2026-08-12":{"prev":[34.0,25.0,23.3,21.8,20.5,20.2,20.4,22.0,21.7,21.4,21.7,22.5,24.3,25.1,24.8,25.4,26.3,27.3,36.3,95.1,100.0,99.1,95.5,34.5],"act":[25.6,23.0,20.6,19.5,18.5,17.7,18.0,19.2,19.4,19.3,23.4,19.9,21.2,22.5,23.1,23.1,24.3,23.5,27.5,29.9,51.2,93.8,42.3,27.5],"d1":[[26.6,22.8,21.2,19.8,18.9,18.3,18.5,20.0,20.6,19.7,19.3,19.9,21.1,23.0,23.7,24.2,25.4,27.3,30.3,33.4,34.6,34.0,32.6,29.4],[24.0,20.6,19.2,17.9,17.2,16.7,16.8,17.9,18.6,17.7,17.4,17.8,19.0,20.8,21.5,21.9,23.3,24.7,27.3,30.4,31.4,30.8,29.5,26.3],[29.1,24.8,22.9,21.4,20.5,19.7,20.0,21.7,22.3,21.5,21.1,21.7,23.3,25.2,25.7,26.5,27.4,29.7,32.7,36.3,37.2,36.5,35.1,32.1]],"d0":[[25.8,22.5,20.9,19.5,18.6,18.3,18.8,19.9,20.3,19.2,19.4,19.5,21.2,22.5,23.1,23.6,25.1,27.0,29.2,31.6,33.2,32.7,31.2,28.3],[23.6,20.4,19.3,18.1,17.2,16.9,17.2,18.1,18.3,17.3,17.6,17.6,19.3,20.5,21.1,21.6,23.2,24.5,26.7,28.9,30.4,29.9,28.5,25.6],[27.9,24.2,22.4,20.9,19.9,19.5,20.2,21.5,22.0,20.9,21.1,21.1,23.1,24.4,24.8,25.4,27.0,29.0,31.4,33.8,35.5,35.0,33.5,30.7]],"e1":17,"e0":16}}},{"id":"F","days":{"2026-01-15":{"prev":[82.7,79.1,72.5,65.6,67.2,66.8,67.3,96.2,77.0,66.0,52.8,50.5,50.1,44.1,45.9,56.7,73.4,78.7,85.4,92.6,89.7,84.1,81.1,78.2],"act":[76.1,70.0,62.5,61.2,61.9,60.8,68.8,79.2,76.2,74.5,66.9,64.1,60.9,52.9,50.9,57.2,62.6,69.8,84.9,89.4,97.4,100.0,93.5,91.6],"d1":[[75.4,68.1,65.3,63.3,63.2,63.5,66.7,73.2,74.9,68.4,65.7,63.3,61.9,60.9,59.9,58.2,66.2,72.0,84.3,91.7,93.1,92.2,89.3,82.2],[69.5,62.9,60.2,58.2,57.8,58.5,61.4,67.1,67.9,60.3,56.2,52.9,51.3,50.5,50.3,49.6,58.2,63.9,76.9,85.3,86.8,86.4,83.3,76.2],[82.7,75.0,71.2,69.2,68.6,68.7,72.8,80.0,82.3,77.3,76.6,74.9,73.5,72.3,69.8,67.1,74.6,81.2,93.3,100.1,101.4,101.0,97.5,90.1]],"d0":[[75.0,69.1,64.7,62.8,62.5,63.4,67.3,74.5,75.2,68.3,65.0,63.7,62.2,61.5,60.4,58.0,66.0,72.0,83.5,90.6,90.5,89.8,86.1,81.0],[69.4,64.2,60.0,58.2,57.8,58.9,62.3,68.9,68.9,60.3,56.4,54.7,52.8,52.0,51.1,50.2,58.9,64.7,76.4,84.5,85.1,84.1,80.3,75.1],[81.3,75.0,70.0,67.7,67.1,68.4,72.7,81.0,81.9,75.8,74.0,74.1,72.3,70.8,68.9,65.8,73.6,80.9,91.9,98.2,97.9,96.9,93.9,88.2]],"e1":5,"e0":5},"2026-05-10":{"prev":[27.6,24.9,22.8,22.1,22.1,21.8,22.3,22.1,19.5,17.1,16.7,15.7,14.8,15.2,15.1,17.0,21.8,28.9,33.8,36.4,36.2,35.5,32.8,31.6],"act":[28.4,24.0,23.2,22.5,22.4,23.0,21.9,21.9,19.4,17.6,16.9,17.9,15.6,16.1,18.1,19.5,23.7,27.0,32.2,34.7,35.2,33.8,17.5,100.0],"d1":[[28.8,26.1,24.0,22.9,22.4,22.0,22.0,22.3,21.1,19.2,18.1,17.1,17.2,17.0,17.4,20.2,22.6,26.9,31.4,34.5,36.0,35.3,34.4,31.5],[26.5,24.4,22.5,21.5,21.1,20.7,20.6,20.5,19.0,17.0,15.8,14.5,14.3,14.4,14.9,17.6,20.1,24.1,28.6,31.9,33.4,32.8,31.8,29.1],[31.2,28.3,26.1,24.8,24.1,23.4,23.5,24.3,23.3,21.5,20.4,19.4,19.5,19.5,19.9,23.0,25.5,29.7,34.5,37.3,39.0,38.1,37.3,34.3]],"d0":[[29.4,26.3,24.0,22.8,22.2,22.1,22.0,22.1,20.9,18.7,18.1,17.1,16.8,16.8,17.5,19.6,22.7,27.2,32.5,35.6,37.1,36.3,35.0,32.4],[27.2,24.6,22.7,21.6,20.9,20.8,20.7,20.5,18.9,16.7,15.8,14.6,14.3,14.3,15.1,17.0,20.2,24.5,29.8,33.0,34.7,33.8,32.5,29.9],[31.6,28.4,26.0,24.7,23.8,23.4,23.4,24.0,23.1,21.2,20.5,19.7,19.4,19.5,20.4,22.5,25.6,30.0,35.4,38.3,39.8,38.8,37.5,34.9]],"e1":17,"e0":17},"2026-08-12":{"prev":[71.8,64.6,61.3,58.5,55.8,54.6,59.7,63.2,59.3,51.9,48.3,47.9,53.3,47.9,48.2,58.0,62.0,65.7,91.7,93.7,95.0,100.0,97.7,84.5],"act":[75.1,66.1,61.2,58.9,52.1,53.1,54.3,59.7,53.1,48.7,43.9,41.7,43.0,45.5,47.1,47.6,52.6,67.6,84.5,94.0,92.7,93.5,87.7,79.4],"d1":[[71.1,62.6,58.6,55.0,53.4,52.4,53.8,58.8,54.9,48.4,45.2,43.0,45.7,43.6,46.0,48.9,53.4,61.2,76.5,87.2,91.3,90.3,88.3,79.3],[63.7,56.3,52.8,49.8,48.4,47.5,48.5,52.8,48.9,42.1,39.0,35.9,38.4,35.9,38.7,41.7,46.8,53.3,67.7,79.1,82.8,81.5,79.2,70.8],[78.6,69.0,64.0,60.2,58.4,56.9,58.5,64.2,61.0,54.5,50.9,48.7,52.2,50.2,52.3,55.9,60.0,69.0,85.1,96.4,99.8,98.9,97.0,87.9]],"d0":[[73.7,64.7,61.0,56.9,55.0,53.5,55.4,60.3,56.0,48.4,44.7,42.0,45.3,43.7,46.4,50.3,54.9,63.2,80.8,90.5,93.4,94.3,91.6,82.1],[67.1,59.1,56.4,52.6,50.9,49.5,50.8,55.3,50.5,42.7,39.0,35.5,38.7,36.7,39.8,43.7,48.5,55.7,72.8,83.0,85.8,86.3,83.6,74.4],[79.9,70.2,65.7,61.3,59.2,57.4,59.8,65.3,62.0,54.3,50.4,47.6,51.3,49.9,52.5,56.6,61.5,70.2,88.6,97.9,101.0,102.6,99.4,90.1]],"e1":4,"e0":3}}}]},"vpp":{"weeks":[{"start":"2024-05-13","smp":[159,159,159,159,83,83,83,83,83,83,83,83,83,83,83,83,92,92,92,92,96,96,96,96,101,101,101,101,98,98,98,98,83,83,83,83,-2,-18,0,91,118,118,118,118,115,115,115,115,113,113,113,113,91,0,-2,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-2,-30,-2,-1,97,99,99,99,99,119,119,119,119,119,119,119,119,111,111,111,111,111,111,111,111,99,99,99,99,158,97,97,97,89,89,89,89,83,83,83,83,83,83,83,83,83,83,83,83,91,91,91,91,104,104,104,104,114,114,114,-1,0,-30,0,-2,138,138,138,0,-18,-78,-79,-79,-79,-79,-79,-79,-79,-70,-2,133,134,134,134,134,154,154,-2,154,134,134,134,134,144,144,147,147,147,147,147,147,142,148,148,148,148,148,148,148,149,149,149,149,149,149,149,149,149,149,149,149,149,149,149,149,115,115,115,115,103,103,103,103,92,92,92,92,92,92,92,92,100,100,100,100,115,115,115,115,115,115,115,115,115,115,115,115,139,139,139,139,-79,-79,-79,-79,154,154,154,154,133,133,-1,-2,-78,-44,-9,153,133,133,133,133,144,144,144,144,148,148,121,-40,-79,-79,-40,0,154,155,155,155,154,154,154,154,155,155,155,155,157,157,157,157,157,157,157,157,157,157,157,157,116,116,116,116,111,111,111,111,105,105,105,105,93,93,93,93,91,91,91,91,105,105,105,105,105,105,105,105,93,93,93,93,85,85,85,85,-71,-78,-78,-78,107,107,107,-51,-79,-79,-79,-78,-79,-79,-79,-79,-79,-79,-79,-78,-79,-78,-2,0,0,116,116,116,116,0,-2,0,-79,-79,-79,-79,-79,-18,-2,0,114,114,0,-2,-2,-2,0,0,114,114,114,114,114,114,114,114,114,114,114,114,107,107,107,107,105,105,105,105,0,0,0,0,-30,-70,-70,-79,-79,-2,-2,-30,-70,-79,-53,-70,-61,-51,-30,-44,0,-2,-2,-70,-2,-30,-44,-78,135,135,135,135,140,140,-79,-77,-78,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-77,-53,-70,0,135,135,135,146,146,146,146,122,159,159,159,155,155,155,155,136,136,136,136,136,136,136,136,130,130,130,130,125,125,125,125,114,121,120,114,112,112,112,112,112,112,112,112,93,93,93,93,92,92,92,92,102,102,102,102,105,105,105,105,114,114,114,-2,-53,-35,115,115,-2,-2,139,139,140,140,0,-26,-78,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-78,-79,-79,-9,-2,120,147,147,147,147,147,121,122,147,151,152,152,152,152,152,152,152,137,137,137,137,139,139,139,139,154,154,154,154,154,154,154,154,154,154,154,137,115,115,115,115,108,108,108,108,108,108,108,108,108,108,108,108,114,114,114,114,114,114,114,114,114,114,114,114,107,0,-2,-79,-78,-79,-79,-79,-79,-79,-79,-79,-77,-77,-79,-78,-79,-79,-79,-51,-79,-78,-77,0,0,114,114,114,143,143,143,143,143,143,143,143,114,114,114,114,159,159,159,159,159,159,159,159,137,137,137,137,143,143,143,143,130,130,130,130,114,114,114,114,114,114,114,114,110,110,110,110,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,93,95,95,95,95,-77,92,92,-2,-79,-79,-79,-79,114,114,-1,-77,-79,-79,-79,-79,-79,-79,-79,-79,-79,-79,-78,-30,-2,114,114,114,114,114,114,114,114,114,114,114,111,111,111,111,158,158,158,158,158,158,158,158,141,141,141,141,138,138,138,138,159,159,159,159,114,114,114,114,105,105,105,105],"wind":[5.2,4.8,4.3,4.2,3.5,2.1,3.6,2.7,2.9,3.0,3.0,3.9,4.7,4.6,4.6,4.5,4.5,4.3,4.3,4.1,4.0,3.6,3.4,3.2,3.0,2.6,2.3,2.2,2.1,1.9,2.0,2.1,2.9,3.3,3.4,3.6,3.5,3.2,3.1,3.0,2.8,2.7,2.3,1.3,1.1,0.8,0.5,0.3,0.5,1.1,1.4,1.3,1.2,1.3,1.0,1.1,0.8,0.8,1.0,1.5,1.9,2.1,1.9,1.3,1.3,1.0,0.6,0.5,1.0,0.7,0.5,0.9,1.3,1.6,1.6,1.8,1.9,2.2,2.0,2.3,2.2,3.1,3.4,5.3,6.7,7.1,8.1,8.1,7.4,6.8,7.4,6.8,7.4,7.7,8.2,8.0,8.9,10.2,10.8,11.7,11.9,10.7,9.5,9.2,10.0,9.9,10.0,10.4,10.8,11.7,12.0,11.3,10.6,9.3,6.1,5.0,4.9,4.8,4.7,4.8,5.1,5.1,5.0,5.2,5.0,4.8,4.2,4.4,4.5,5.0,4.9,4.6,4.6,4.7,5.0,4.7,4.0,3.8,4.0,2.5,3.0,3.5,3.7,3.7,3.5,3.8,4.0,3.6,3.3,3.1,3.4,3.6,3.9,3.9,3.2,3.2,2.7,1.8,1.2,0.8,0.9,1.4,2.1,1.8,2.2,2.6,2.9,3.0,3.1,3.0,2.8,2.8,2.8,2.8,2.7,2.6,2.8,2.5,2.9,3.2,3.3,3.1,2.8,2.4,1.8,1.0,1.8,1.3,0.5,0.9,1.1,0.7],"dem":[580,558,545,535,534,534,534,518,490,469,457,452,452,461,471,498,531,569,600,624,628,615,600,581,549,531,519,517,521,536,561,585,608,612,602,582,556,589,616,639,672,697,722,728,715,691,676,654,612,591,581,574,576,587,605,617,627,625,613,594,565,600,624,645,677,700,721,728,716,699,683,664,622,600,587,579,578,580,582,570,562,557,554,551,542,581,616,646,666,667,674,680,677,662,643,626,588,568,559,553,555,564,588,607,624,622,604,572,539,570,592,616,653,680,708,719,711,688,674,655,613,592,582,574,576,584,600,620,637,632,615,593,567,598,618,635,664,681,701,709,699,679,668,649,607,584,570,561,561,561,561,545,525,514,508,497,483,497,513,533,565,598,628,645,647,632,623,602,567,544,529,523,523,527,528,506,479,465,463,459,460,468,480,506,546,590,624,645,648,631,613,591],"neg":178,"n":672,"r4":108,"r24":94,"missing":0},{"start":"2025-03-17","smp":[97,97,97,97,84,84,84,84,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,-48,-48,85,85,85,85,85,85,82,82,82,82,82,82,82,-48,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-48,112,99,99,99,99,96,96,96,96,87,87,87,87,97,97,97,97,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,98,96,96,96,96,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83,87,87,87,87,111,111,111,111,136,136,136,136,136,136,145,110,111,0,-48,-50,-50,-70,-70,-70,-70,-70,-70,-70,-70,-70,-48,-70,-48,0,110,127,123,123,123,123,123,123,123,123,114,114,114,114,114,114,114,149,113,113,113,113,111,111,111,111,111,111,111,111,111,111,111,111,111,111,111,111,144,144,144,144,99,99,99,99,89,89,89,89,87,87,87,87,89,89,89,89,97,97,97,97,110,110,110,110,141,141,141,141,143,143,143,143,153,153,153,153,133,133,133,133,128,128,128,128,110,125,125,125,125,125,125,125,125,125,125,125,125,125,125,125,137,137,137,137,137,141,141,141,137,137,137,137,137,137,137,137,142,142,142,142,142,142,142,142,142,142,142,142,142,142,142,142,112,112,112,112,98,98,98,98,96,96,96,96,91,91,91,91,97,97,97,97,106,106,106,106,113,113,113,113,113,113,113,113,137,137,137,142,142,142,142,142,158,158,158,158,141,141,141,141,141,141,141,129,129,129,129,129,129,129,129,129,129,129,129,129,130,130,130,130,129,129,129,142,131,131,131,143,144,144,144,144,144,144,144,144,144,144,144,144,144,144,144,144,144,144,144,144,112,112,112,112,100,100,100,100,97,97,97,97,97,97,97,97,97,97,97,97,111,111,111,111,150,150,150,150,150,150,150,150,150,150,150,145,145,145,136,136,111,-48,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-48,0,130,130,130,145,148,148,148,148,130,130,130,148,148,148,148,148,148,148,148,148,148,148,148,148,148,148,148,148,148,148,146,146,114,114,114,114,97,97,97,97,96,96,96,96,89,89,89,89,97,97,97,97,103,103,103,103,144,144,144,144,144,144,144,144,144,144,132,132,-48,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,126,126,126,126,126,126,126,126,135,135,135,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,112,112,112,112,143,143,143,143,143,143,143,143,143,143,143,143,143,124,124,124,114,139,114,0,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-48,97,97,97,116,116,116,116,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,124,124,124,124,115,115,115,115,114,114,114,114,112,112,112,112,114,114,114,114,137,137,137,137,146,146,146,146,144,144,144,144,100,100,100,100,0,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,103,101,101,101,101,114,114,114,114,124,124,124,124,135,135,135,135,135,135,135,135,135,135,135,135,135,135,135,135,135,135,135,135],"wind":[12.2,11.2,11.4,12.7,12.3,12.0,3.1,3.4,3.7,4.9,5.4,6.1,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,7.5,6.8,7.0,10.9,10.5,10.3,10.4,10.5,10.6,10.6,10.3,9.7,8.2,4.4,4.0,2.9,5.2,5.7,8.1,9.8,8.1,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,14.0,12.3,11.8,11.0,11.0,11.3,11.3,10.9,10.7,10.4,10.5,10.3,9.9,10.0,14.0,14.0,14.0,8.0,7.5,6.4,5.9,5.4,5.5,5.5,5.8,6.7,6.4,5.9,6.4,6.2,6.0,5.7,4.5,3.7,3.2,3.3,3.5,3.5,3.3,3.4,4.2,4.6,4.7,4.8,5.0,5.3,5.9,7.4,8.2,8.5,8.9,8.9,8.5,8.1,7.7,6.5,5.3,4.8,4.9,4.8,5.1,4.9,5.1,5.2,5.3,5.1,5.1,5.0,5.2,5.1,5.5,5.9,6.1,6.5,7.1,7.6,7.9,7.8,6.9,6.5,6.1,5.9,6.1,5.8,6.0,7.2,7.6,7.6,7.6,7.6,7.1,6.7,6.5,6.3,6.7,7.1,7.8,8.3,8.6,9.1,9.2,8.8,7.5,6.8,6.3,6.2,6.4,6.7,7.2,7.3,7.2,7.0,6.8,6.5,6.2,7.6,7.4,6.9,6.5,6.1,5.9,5.9,6.3,6.4,5.8,5.1,4.4,3.3,2.9,3.4,3.7,4.3,5.8],"dem":[623,596,580,573,575,585,596,602,601,610,621,616,606,588,566,564,593,645,692,709,704,690,679,672,640,615,601,597,606,632,682,747,786,775,740,698,657,676,693,712,753,786,816,816,790,765,756,745,703,676,661,652,657,678,720,786,849,879,879,861,815,828,823,824,835,835,843,837,806,778,769,755,713,686,672,666,672,693,736,784,813,800,768,724,667,677,686,706,746,781,812,818,794,770,760,747,702,676,661,656,661,680,715,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,680,655,638,631,638,657,693,731,743,717,677,632,587,603,619,642,681,712,741,750,734,717,715,703,660,634,618,611,613,622,635,627,591,556,527,501,477,487,498,524,562,604,645,662,656,647,650,641,604,579,566,560,561,572,582,570,529,491,469,453,451,458,476,510,556,599,638,656,652,639,627,611],"neg":121,"n":672,"r4":99,"r24":57,"missing":0},{"start":"2024-12-16","smp":[98,98,98,98,83,83,83,83,83,83,83,83,82,82,82,82,82,82,82,82,83,83,83,83,92,92,92,92,97,97,97,97,112,112,112,112,102,102,102,102,133,133,133,133,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,103,103,103,103,103,103,103,103,110,110,110,110,111,111,111,111,111,111,111,111,103,103,103,103,111,111,111,111,102,102,102,102,102,102,102,102,111,111,111,111,100,100,100,100,80,80,80,80,80,80,80,80,80,80,80,80,111,111,111,111,101,101,101,101,134,134,134,134,147,147,147,147,171,171,171,171,157,157,157,157,157,158,158,158,158,157,157,157,158,158,158,158,159,156,156,156,157,158,157,157,158,158,158,158,158,158,158,143,140,140,158,158,158,158,158,158,158,158,158,158,158,158,158,158,159,159,159,157,116,116,116,116,93,93,93,93,85,85,85,85,82,82,82,82,82,82,82,82,82,82,82,82,92,92,92,92,97,97,97,97,141,141,141,141,159,159,159,159,159,159,159,159,159,159,159,158,158,159,159,159,154,154,159,159,159,159,159,159,159,159,159,159,159,159,159,159,142,142,142,142,141,141,141,141,142,160,160,160,160,160,160,160,160,160,160,160,120,120,120,120,102,102,102,102,101,101,101,101,92,92,92,92,91,91,91,91,91,91,91,91,82,82,82,82,82,82,82,82,92,92,92,92,112,112,112,112,117,117,117,117,144,144,144,144,231,127,190,126,0,0,0,0,144,121,119,0,0,0,0,0,119,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,136,136,136,136,141,141,141,141,121,121,121,121,115,115,115,115,115,115,115,115,103,103,103,103,92,92,92,92,91,91,91,91,83,83,83,83,91,91,91,91,92,92,92,92,112,112,112,112,116,116,116,116,143,143,143,143,172,172,172,172,162,162,162,162,129,128,126,153,142,142,142,142,142,142,142,142,143,143,143,143,146,146,146,146,144,144,144,144,143,143,143,143,142,142,142,142,141,141,141,141,136,136,136,136,120,120,120,120,108,108,108,108,111,111,111,111,103,103,103,103,92,92,92,92,91,91,91,91,82,82,82,82,91,91,91,91,91,91,91,91,102,102,102,102,117,117,117,117,161,161,161,161,164,164,164,164,161,161,161,161,161,161,161,161,160,160,160,160,160,160,160,160,161,161,161,161,167,167,167,167,159,159,159,159,159,159,159,159,159,159,159,159,159,159,159,159,159,159,159,159,115,115,115,115,101,101,101,101,116,116,116,116,93,93,93,93,92,92,92,92,92,92,92,92,82,82,82,82,82,82,82,82,83,83,83,83,92,92,92,92,102,102,102,102,102,102,102,102,108,108,108,108,143,143,143,143,143,143,143,143,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,103,103,103,103,109,109,109,109,109,109,109,109,93,93,93,93,93,93,93,93,93,93,93,93,98,98,98,98,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,92,92,92,92,93,93,93,93,93,93,93,93,121,121,121,121,93,93,93,93,106,106,106,106,105,105,105,105,105,105,105,105,93,93,93,93,93,93,93,93,105,105,105,105,106,106,106,106,106,106,106,106,106,106,106,106,105,105,105,105,104,104,104,104,104,104,104,104,94,94,94,94],"wind":[3.3,3.4,3.4,3.4,3.7,3.8,4.6,4.7,4.8,5.6,6.6,6.9,7.2,7.2,7.3,7.4,7.0,5.7,6.9,6.5,6.9,6.9,7.2,6.7,6.5,6.4,6.2,6.5,6.5,6.4,3.1,2.8,2.4,2.9,3.6,3.8,4.0,4.1,4.1,4.1,4.0,2.8,1.9,1.8,1.9,1.9,1.6,1.5,1.5,1.6,1.6,1.7,1.8,1.8,4.6,4.2,3.9,3.5,3.9,4.3,4.3,4.7,4.8,5.1,4.6,4.1,4.9,4.5,4.5,4.9,4.8,6.6,8.2,7.5,8.4,7.9,7.3,6.4,7.4,6.6,8.8,8.9,9.6,11.6,10.6,12.5,13.5,13.1,12.8,12.6,8.9,9.1,9.4,9.7,10.0,9.7,9.2,8.4,7.5,7.0,6.9,6.3,4.5,4.2,3.8,4.3,3.7,3.4,3.6,3.5,3.4,3.5,3.5,2.2,1.9,1.5,1.3,1.2,1.1,1.0,0.8,0.7,0.7,0.5,1.0,0.9,2.0,2.0,2.0,1.6,1.8,2.5,3.7,3.6,3.0,2.8,2.8,2.3,2.2,2.1,2.1,1.9,2.1,2.0,2.4,2.4,2.7,3.3,3.8,4.3,5.3,6.0,6.4,6.8,7.8,8.5,8.6,9.0,9.1,9.1,8.9,8.4,10.2,10.6,10.5,10.2,10.9,11.3,10.6,10.2,10.0,9.9,10.0,9.6,9.5,9.6,8.8,9.9,10.0,9.8,9.9,9.8,10.1,9.4,8.8,8.6,5.4,4.8,4.2,3.5,2.9,2.5],"dem":[680,649,630,622,621,628,642,652,661,660,664,648,638,638,644,659,684,722,732,726,716,701,694,690,658,633,619,616,623,649,700,785,874,874,836,817,785,829,855,878,894,886,863,844,813,783,776,766,724,697,682,675,681,701,745,814,890,885,849,808,761,797,824,857,884,888,870,851,821,793,786,775,732,706,689,680,686,707,750,822,904,904,875,844,797,830,857,882,907,908,886,868,838,810,800,790,748,719,705,696,700,720,764,835,915,905,861,819,765,792,819,855,889,897,879,860,829,798,791,783,743,712,693,684,688,706,748,817,897,908,891,876,845,883,890,887,884,871,844,827,802,778,773,767,727,698,677,664,663,672,687,703,725,737,738,727,712,727,737,743,750,765,765,754,741,727,732,735,702,673,653,645,644,650,665,677,677,648,622,597,581,582,599,638,691,740,755,752,741,725,720,717],"neg":0,"n":672,"r4":38,"r24":35,"missing":0}]},"hn":{"months":[{"year":2023,"month":11,"days":30,"n":2580,"q":[[0,6,10,14,17,21,25,29,33,37,41,45,49,54,59,63,71,76,82,86,92,96,102,108,112,118,123,128,133,139,143],[0,10,18,25,32,40,46,53,60,67,74,82,89,97,103,110,122,130,140,148,157,164,172,180,189,198,207,215,223,231,239],[0,16,28,38,48,59,69,78,87,97,106,117,127,137,146,155,170,180,193,204,214,224,234,244,254,264,275,285,296,306,316],[0,22,37,49,62,76,88,100,112,124,136,150,162,175,186,197,217,229,244,258,271,283,296,308,320,333,346,359,371,384,397],[0,27,46,62,77,94,109,124,138,153,168,183,199,215,230,242,265,280,300,316,333,347,364,379,394,411,426,443,458,474,492]],"over":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,2,3,4,5,7,9,11,13,16,18,21,24]},{"year":2024,"month":2,"days":29,"n":2959,"q":[[0,5,13,19,26,32,38,44,50,57,64,70,77,83,89,95,102,108,116,123,130,135,142,148,155,162,169,175,182,189],[0,7,18,27,36,45,53,62,71,80,88,97,106,114,122,131,140,148,158,167,175,184,193,201,210,220,228,236,245,254],[0,10,23,35,46,57,68,79,89,100,111,122,133,144,154,165,175,186,198,209,220,231,241,252,263,274,284,295,305,315],[0,12,29,43,57,71,84,97,111,124,137,150,164,177,190,203,216,229,243,256,269,283,296,309,322,336,348,360,373,387],[0,16,36,52,68,84,101,117,132,148,164,180,196,212,228,244,260,276,292,307,323,340,356,371,387,402,419,435,449,466]],"over":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,2,3,5,6,9,10,13,15,19,22]}]}}</script>
+<script src="viz.js" defer></script>
 <script type="module" src="assets/system.js"></script>
 <script type="module" src="assets/motion/motion.js"></script>
 </body>
