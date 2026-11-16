@@ -1,4 +1,4 @@
-/* The three data figures: the LH forecast replay, the Jeju SMP week and the One Bailey month.
+/* The three data figures: the LH forecast replay, the Jeju SMP week and the household month.
    Data: the JSON in #viz-data (built from the project files; see the build notes beside the page).
    Every figure draws its finished state on load; it moves only when a control is used, and rests
    under reduced motion. Inline SVG in a 1000-wide user space stretched to the plot (lines keep their
@@ -329,7 +329,7 @@
     update(false);
   }
 
-  /* ---------- 3. One Bailey month: cumulative use of every household, as percentiles */
+  /* ---------- 3. Household month: cumulative use of every household, as percentiles */
   const hn = document.querySelector('[data-viz="hn"]');
   if (hn && D.hn) {
     const plot = hn.querySelector('.plot'), xax = hn.querySelector('.xax'), read = hn.querySelector('.viz-read');
