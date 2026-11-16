@@ -1,4 +1,4 @@
-/* The three data figures: the LH forecast replay, the Jeju SMP week and the household month.
+/* The three data figures: the complex-load replay, the Jeju SMP week and the household month.
    Data: the JSON in #viz-data (built from the project files; see the build notes beside the page).
    Every figure draws its finished state on load; it moves only when a control is used, and rests
    under reduced motion. Inline SVG in a 1000-wide user space stretched to the plot (lines keep their
@@ -139,9 +139,9 @@
   };
   const head = (tip, text) => { const h = div('tip__h', tip, text); return h; };
 
-  /* ---------- 1. LH replay: 48 hours, the day before and the target day */
-  const lh = document.querySelector('[data-viz="lh"]');
-  if (lh && D.lh) {
+  /* ---------- 1. Complex-load replay: 48 hours, the day before and the target day */
+  const lh = document.querySelector('[data-viz="load"]');
+  if (lh && D.load) {
     const plot = lh.querySelector('.plot'), xax = lh.querySelector('.xax'), read = lh.querySelector('.viz-read');
     const H = 400;
     const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'none', 'aria-hidden': 'true', focusable: 'false' }, plot);
@@ -163,7 +163,7 @@
     const tw = tweener();
     const pick = { date: () => '', cx: () => '', run: () => '' };
     const state = () => {
-      const c = D.lh.cx.find((x) => x.id === pick.cx()), day = c.days[pick.date()], run = pick.run();
+      const c = D.load.cx.find((x) => x.id === pick.cx()), day = c.days[pick.date()], run = pick.run();
       const f = day[run];
       return {
         c, day, run,
@@ -330,8 +330,8 @@
   }
 
   /* ---------- 3. Household month: cumulative use of every household, as percentiles */
-  const hn = document.querySelector('[data-viz="hn"]');
-  if (hn && D.hn) {
+  const hn = document.querySelector('[data-viz="tier"]');
+  if (hn && D.tier) {
     const plot = hn.querySelector('.plot'), xax = hn.querySelector('.xax'), read = hn.querySelector('.viz-read');
     const range = hn.querySelector('input[type="range"]'), play = hn.querySelector('[data-play]');
     const H = 400;
@@ -376,7 +376,7 @@
       readout();
     };
     const build = () => {
-      m = D.hn.months.find((x) => String(x.month) === pick.mo());
+      m = D.tier.months.find((x) => String(x.month) === pick.mo());
       yMax = Math.ceil((Math.max(m.q[4][m.days], 400) * 1.15) / 100) * 100;
       gGrid.replaceChildren(); gY.replaceChildren(); xax.replaceChildren();
       for (let v = 0; v <= yMax; v += 200) {
